@@ -20,12 +20,12 @@ module.exports = function(sequelize, DataTypes){
                 message: "Please enter a valid email!"
         }
     },
-      username:{
+      uname:{
         type:DataTypes.STRING,
         unique:true,
         allowNull:false
     },
-      password:{
+      pw:{
         type:DataTypes.STRING,
         allowNull:false,
         validate:{
@@ -37,7 +37,7 @@ module.exports = function(sequelize, DataTypes){
     // };
 //encrypts password
     User.beforeCreate(function(user) {
-        user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
+        user.pw = bcrypt.hashSync(user.pw, bcrypt.genSaltSync(10), null);
     });
     
     return User;
