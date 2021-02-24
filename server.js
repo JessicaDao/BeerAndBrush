@@ -10,46 +10,42 @@ const app = express();
 // process.env.PORT lets the port be set by Heroku
 const PORT = process.env.PORT || 3000;
 
-//Models for syncing
-const db = require ("./models");
+// Models for syncing
+const db = require("./models");
 
 // Set up Express app to handle data parsing
-app.use(express.urlencoded({
-  extended:true
-}));
+app.use(express.urlencoded({extended: true}));
 
 app.use(express.json());
 
-//saving data
+// saving data
 app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {maxAge: 1000*60*60*2} //max time saved 2hrs before logout
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 2
+    } // max time saved 2hrs before logout
 }))
 
-//Static directory
+// Static directory
 app.use(express.static("public"));
 
 
 // Data
 
 // Routes
-const frontRoutes = require("./controllers/frontController");
-app.use(frontRoutes);
+const controllers = require("./controllers/html-controllers")
+app.use(controllers)
 
 const userRoutes = require("./controllers/userController");
 app.use(userRoutes);
 
 
-//----
+// ----
 
-db.sequelize.sync({
-  force: false
-}).then(function(){
-// Start our server so that it can begin listening to client requests.
-app.listen(PORT, function() {
-  // Log (server-side) when our server has started
-  console.log("Server listening on: http://localhost:" + PORT);
-});
+db.sequelize.sync({force: false}).then(function () { // Start our server so that it can begin listening to client requests.
+    app.listen(PORT, function () { // Log (server-side) when our server has started
+        console.log("Server listening on: http://localhost:" + PORT);
+    });
 });
