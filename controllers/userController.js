@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../models");
 const user = require("../models/user");
 const bcrypt = require("bcrypt");
+const { jsxText } = require("@babel/types");
 
 //Sign up
 router.post("/signup",(req,res)=>{
@@ -45,6 +46,34 @@ router.post("/login",(req,res)=>{
     })
 })
 
+// //Authentication - copy of Joe's demo, need edit
+// app.post('/login', (req, res)=>{
+//     db.User.findOne({
+//         where:{
+//             email:req.body.email
+//         }
+//     }).then(user=>{
+//         if(!user){
+//             return res.status(404).send("No such user.")
+//         }
+//         else if(bcrypt.compareSync(req.body.password,user.password)){
+//             const token = jwt.sign({
+//                 email:user.email,
+//                 id:user.id
+//             },"catscatscats",
+//             {
+//                 expiresIn:"2h"
+//             })
+//             return res.json({user,token})
+//         }
+//         else {
+//             return res.status(403).send("Wrong Password!")
+//         }
+//     })
+// })
+
+
+
 // Shows current session
 router.get("/readsessions", (req,res)=>{
     res.json(req.session)
@@ -58,6 +87,39 @@ router.get("/secretclub", (req,res)=>{
         res.status(401).send("Please sign in!!")
     }
 })
+
+
+// // Joe's demo, need edit
+// app.get("/secretclub", (req,res)=>{
+//     let token = false;
+//     if(!req.headers){
+//         token=false
+//     }
+//     else if(!req.headers.authorization){
+//         token=false;
+//     }
+//     else {
+//         token.headers.authorization.split(" ")[1];
+//     }
+//     if(!token){
+//         res.status(403).send("Please sign in!")
+//     }
+//     else {
+//         const data = jwt.verify(token, "catscatscats", (err,data)=>{
+//             if(err){
+//                 return false
+//             } else {
+//                 return data;
+//             }
+//         })
+//         if(data){
+//             res.send("Welcome, ${data.email}")
+//         } else {
+//             res.status(403).send("Auth failed.")
+//         }
+//     }
+// })
+
 
 
 // Destroy = deletes existing cookies
