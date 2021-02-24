@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../models");
-const user = require("../models/user");
+const db = require("../../models");
+const user = require("../../models/user");
 
 
-router.get("/login", (req,res)=>{
-    res.render("login")
-})
+// router.get("/login", (req,res)=>{
+//     res.render("login")
+// })
 
-router.get("/signup", (req,res)=>{
-    res.render("signup")
-})
+// router.get("/signup", (req,res)=>{
+//     res.render("signup")
+// })
 
 // router.get("/addArt", (req, res) => {
 //     if(!req.session.user){
