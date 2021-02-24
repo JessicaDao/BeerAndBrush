@@ -1,5 +1,5 @@
-DROP DATABASE IF EXISTS beerBrush
+DROP DATABASE IF EXISTS beerBrush_db;
 
-CREATE DATABASE beerBrush
+CREATE DATABASE beerBrush_db;
 
-USE beerBrush
+USE beerBrush_db;
