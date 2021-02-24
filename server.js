@@ -39,7 +39,10 @@ const controllers = require("./controllers/html-controllers")
 app.use(controllers)
 
 const userRoutes = require("./controllers/userController");
+const { brotliCompress } = require("zlib");
 app.use(userRoutes);
+
+
 
 
 // ----
