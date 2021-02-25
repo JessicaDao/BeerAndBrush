@@ -83,7 +83,17 @@ router.post("/update/:user_id", async (req, res) => {
 })
 
 // ***************************************** D ****
-
+router.delete("/delete/:user_id", async (req, res) => {
+    let userToDelete = await db.User.destroy({
+        where: {
+            id: req.params.user_id
+        }
+    })
+    res.json({
+        data: userToDelete,
+        msg: "successfully deleted"
+    })
+})
 
 
 // Login
