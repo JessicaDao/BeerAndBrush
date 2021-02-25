@@ -15,10 +15,11 @@ module.exports = function(sequelize, DataTypes){
         type:DataTypes.STRING,
         unique:true,
         allowNull:false,
-        validate: {
-          validator: (val) => /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/.test(val),
-                message: "Please enter a valid email!"
-        }
+        // TODO: look in to how to validate with Regex
+        // validate: {
+        //   validator: (val) => /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/.test(val),
+        //         message: "Please enter a valid email!"
+        // }
     },
       uname:{
         type:DataTypes.STRING,
@@ -31,10 +32,13 @@ module.exports = function(sequelize, DataTypes){
         validate:{
          len:[8]
       }}
-});
+    },
+    { timestamps: true }
+);
     // User.associate = function(models){
     //     User.hasMany(models._____);
     // };
+
 //encrypts password
     User.beforeCreate(function(user) {
         user.pw = bcrypt.hashSync(user.pw, bcrypt.genSaltSync(10), null);

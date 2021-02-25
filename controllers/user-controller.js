@@ -1,16 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
-const user = require("../models/user");
+const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
 
 
 // ***************************************** C ****
+<<<<<<< HEAD:controllers/userController.js
 router.post("/register", (req, res) => {
     res.json({
         msg: "this is a test"
+=======
+router.post("/register",(req,res)=>{
+    db.User.create({
+        fname: req.body.fname,
+        lname: req.body.lname,
+        email: req.body.email,
+        uname: req.body.uname,
+        pw: req.body.pw
+    }).then(data=>{
+        res.json(data);
+    }).catch(err=>{
+        res.status(500).json(err);
+>>>>>>> 42cdb384cba115404b34994b588a17d9e680eb34:controllers/user-controller.js
     })
     // db.User.create({
     //     fname: req.body.fname,
@@ -27,7 +41,11 @@ router.post("/register", (req, res) => {
 
 // ***************************************** R ****
 
+<<<<<<< HEAD:controllers/userController.js
 router.post("/check_login", (req, res) => {
+=======
+router.post("/login",(req,res)=>{
+>>>>>>> 42cdb384cba115404b34994b588a17d9e680eb34:controllers/user-controller.js
     db.User.findOne({ //finds user
         where: {
             uname: req.body.uname
@@ -52,7 +70,10 @@ router.post("/check_login", (req, res) => {
     })
 })
 
+
 // ***************************************** U ****
+
+
 
 // ***************************************** D ****
 
