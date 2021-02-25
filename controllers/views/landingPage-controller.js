@@ -4,25 +4,24 @@ const db = require("../../models");
 const user = require("../../models/user");
 
 
-router.get("/login", (req,res)=>{
-    console.log("Test");
-    res.render("login")
+router.get("/check_login", (req,res)=>{
+    // TODO: steps to login
+    // > all data should be found inside the req.body 
+    // > check for unique email
+    // > compare password given with hash
+    // > return results
+
+    res.json({
+        status: 200,
+        msg: "credentials authorized"
+    })
 })
 
-router.get("/signup", (req,res)=>{
-    res.render("signup")
+router.get("/register_new_user", (req,res)=>{
+    res.json({
+        status: 200,
+        msg: "successfully registered a new user"
+    })
 })
-
-// router.get("/addArt", (req, res) => {
-//     if(!req.session.user){
-//         res.redirect("/login")
-//     } else {
-//         res.render("addArt", {
-//             user: req.session.user
-//         })
-//     }
-// })
-
-
 
 module.exports = router;

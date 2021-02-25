@@ -8,7 +8,7 @@ const app = express();
 
 // Set the port of our application
 // process.env.PORT lets the port be set by Heroku
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Models for syncing
 const db = require("./models");
@@ -35,8 +35,9 @@ app.use(express.static("public"));
 // Data
 
 // Routes
-const controllers = require("./controllers/html-controllers")
-app.use(controllers)
+// const controllers = require("./controllers/html-controllers")
+// app.use(controllers)
+require('./controllers/controller')(app)
 
 const userRoutes = require("./controllers/userController");
 const { brotliCompress } = require("zlib");
