@@ -5,8 +5,10 @@ const user = require("../models/user");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
-//Sign up
-router.post("/signup",(req,res)=>{
+
+
+// ***************************************** C ****
+router.post("/register",(req,res)=>{
     db.User.create({
         fname: req.body.fname,
         lname: req.body.lname,
@@ -14,14 +16,15 @@ router.post("/signup",(req,res)=>{
         uname: req.body.uname,
         pw: req.body.pword
     }).then(data=>{
-    res.json(data);
+        res.json(data);
     }).catch(err=>{
         res.status(500).json(err);
     })
 })
 
-// Login
-router.post("/login",(req,res)=>{
+// ***************************************** R ****
+
+router.post("/check_login",(req,res)=>{
     db.User.findOne({ //finds user
     where: {
         uname:req.body.uname
@@ -45,6 +48,15 @@ router.post("/login",(req,res)=>{
     }
     })
 })
+
+// ***************************************** U ****
+
+// ***************************************** D ****
+
+
+
+// Login
+
 
 // //Authentication - copy of Joe's demo, need edit
 // app.post('/login', (req, res)=>{
@@ -72,8 +84,6 @@ router.post("/login",(req,res)=>{
 //     })
 // })
 
-
-
 // Shows current session
 router.get("/readsessions", (req,res)=>{
     res.json(req.session)
@@ -87,7 +97,6 @@ router.get("/secretclub", (req,res)=>{
         res.status(401).send("Please sign in!!")
     }
 })
-
 
 // // Joe's demo, need edit
 // app.get("/secretclub", (req,res)=>{
@@ -119,8 +128,6 @@ router.get("/secretclub", (req,res)=>{
 //         }
 //     }
 // })
-
-
 
 // Destroy = deletes existing cookies
 router.get("/logout", (req, res)=>{

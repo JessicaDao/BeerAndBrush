@@ -1,7 +1,4 @@
-const html_controllers = require('./html-controllers')
-
 module.exports = app => {
-    // app.use('', require('./views/landingPage-controller'))
-    html_controllers(app)
-    // api_controllers(app)
+    app.use('api/user', require('./userController'))
+    app.use('api/project', require('./project-controller'))
 }
