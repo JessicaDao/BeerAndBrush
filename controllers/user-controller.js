@@ -66,14 +66,14 @@ router.get("/:user_id", async (req, res) => {
             id: req.params.user_id
         }
     })
-    
+
     res.json({
         data: oneUser
     })
 })
 
 router.get("/all", async (req, res) => {
-    let allUsers = await db.User.findAll() 
+    let allUsers = await db.User.findAll()
 
     res.json({
         data: allUsers
