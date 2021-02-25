@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
-const user = require("../models/user");
+const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
@@ -14,7 +14,7 @@ router.post("/register",(req,res)=>{
         lname: req.body.lname,
         email: req.body.email,
         uname: req.body.uname,
-        pw: req.body.pword
+        pw: req.body.pw
     }).then(data=>{
         res.json(data);
     }).catch(err=>{
@@ -24,7 +24,7 @@ router.post("/register",(req,res)=>{
 
 // ***************************************** R ****
 
-router.post("/check_login",(req,res)=>{
+router.post("/login",(req,res)=>{
     db.User.findOne({ //finds user
     where: {
         uname:req.body.uname
@@ -49,7 +49,10 @@ router.post("/check_login",(req,res)=>{
     })
 })
 
+
 // ***************************************** U ****
+
+
 
 // ***************************************** D ****
 
