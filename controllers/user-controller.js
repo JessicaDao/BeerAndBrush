@@ -67,21 +67,19 @@ router.post("/login",(req,res)=>{
     }
 }).then(userData=>{
     if(!userData){
-        req.session.destroy(); //resets cookie after failed 
         res.json(404).send("User not found.")
-    } else {
-        if(bcrypt.compareSync(req.body.pw, userData.pw)){
-            req.session.user={
+    } else if(bcrypt.compareSync(req.body.pw, userData.pw)){
+        const token = jwt.sign({
                 id: userData.id,
                 uname: userData.uname
-            }
-            //authenticate user
-            res.json(userData);
+            }, "bananas",
+            {
+                expiresIn: "2h"
+            })
+            return res.json({user, token});
         } else {
-            req.session.destroy(); //resets cookie after failed 
             res.status(401).send("Incorrect password. Try again.")
         }
-    }
     })
 })
 
@@ -135,79 +133,45 @@ router.delete("/delete/:user_id", async (req, res) => {
 })
 
 
-// Login
-
-
-// //Authentication - copy of Joe's demo, need edit
-// app.post('/login', (req, res)=>{
-//     db.User.findOne({
-//         where:{
-//             email:req.body.email
-//         }
-//     }).then(user=>{
-//         if(!user){
-//             return res.status(404).send("No such user.")
-//         }
-//         else if(bcrypt.compareSync(req.body.password,user.password)){
-//             const token = jwt.sign({
-//                 email:user.email,
-//                 id:user.id
-//             },"catscatscats",
-//             {
-//                 expiresIn:"2h"
-//             })
-//             return res.json({user,token})
-//         }
-//         else {
-//             return res.status(403).send("Wrong Password!")
-//         }
-//     })
+// // Check if signed in or not
+// router.get("/secretclub", (req,res)=>{
+//     if(req.session.user){
+//         res.send(`Hello, ${req.session.user.uname}!`)
+//     } else {
+//         res.status(401).send("Please sign in!!")
+//     }
 // })
 
-// Shows current session
-router.get("/readsessions", (req,res)=>{
-    res.json(req.session)
-})
-
-// Check if signed in or not
-router.get("/secretclub", (req,res)=>{
-    if(req.session.user){
-        res.send(`Hello, ${req.session.user.uname}!`)
-    } else {
-        res.status(401).send("Please sign in!!")
+// JWT secretclub
+app.get("/secretclub", (req,res)=>{
+    let token = false;
+    if(!req.headers){
+        token=false
+    }
+    else if(!req.headers.authorization){
+        token=false;
+    }
+    else {
+        token.headers.authorization.split(" ")[1];
+    }
+    if(!token){
+        res.status(403).send("Please sign in!")
+    }
+    else {
+        const data = jwt.verify(token, "bananas", (err,data)=>{
+            if(err){
+                return false
+            } else {
+                return data;
+            }
+        })
+        if(data){
+            res.send("Welcome, ${data.uname}")
+        } else {
+            res.status(403).send("Auth failed.")
+        }
     }
 })
-
-// // Joe's demo, need edit
-// app.get("/secretclub", (req,res)=>{
-//     let token = false;
-//     if(!req.headers){
-//         token=false
-//     }
-//     else if(!req.headers.authorization){
-//         token=false;
-//     }
-//     else {
-//         token.headers.authorization.split(" ")[1];
-//     }
-//     if(!token){
-//         res.status(403).send("Please sign in!")
-//     }
-//     else {
-//         const data = jwt.verify(token, "catscatscats", (err,data)=>{
-//             if(err){
-//                 return false
-//             } else {
-//                 return data;
-//             }
-//         })
-//         if(data){
-//             res.send("Welcome, ${data.email}")
-//         } else {
-//             res.status(403).send("Auth failed.")
-//         }
-//     }
-// })
 
 // Destroy = deletes existing cookies
 router.get("/logout", (req, res)=>{
