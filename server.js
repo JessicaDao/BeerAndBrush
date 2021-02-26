@@ -39,7 +39,6 @@ app.use(express.static("public"));
 // Routes
 app.use('/api/user', require("./controllers/user-controller"));
 app.use('/api/project', require('./controllers/project-controller'));
-app.use('/api/reviews', require('./controllers/review-controller'));
 
 
 // ----
