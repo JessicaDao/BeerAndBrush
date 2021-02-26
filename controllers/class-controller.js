@@ -7,7 +7,7 @@ const { jsxText } = require("@babel/types");
 const classDetails = require("../models/class-details");
 
 
-router.get("/", (req, res)=>{
+router.get("/",(req,res)=>{
     db.classDetails.findAll().then(data=>{
         res.json(data)
     }).catch(err=>{
@@ -15,10 +15,10 @@ router.get("/", (req, res)=>{
     })
 })
 // ***************************************** C ****
-router.post("/", (req, res)=>{
+router.post("/",(req,res)=>{
     if(!req.session.user){
         res.status(401).send("Please login.")
-    }else {
+    } else {
     db.classDetails.create({
         name: req.body.name,
         level: req.body.level,
@@ -42,12 +42,55 @@ router.post("/", (req, res)=>{
 
 
 // ***************************************** U ****
+router.put("/classes/update/:id",(req,res) => {
+    if (!req.session.user){
+        res.status(401).send("Unable to retrieve.")
+    } else {
+        let classObj = {};
+        if(req.body.name !== null && req.body.name !== ""){
+            classObj.name = req.body.name;
+        }
+        if(req.body.level !== null && req.body.level !== ""){
+            classObj.level = req.body.level;
+        }
+        if(req.body.date !== null && req.body.date !== ""){
+            classObj.date = req.body.date;
+        }
+        if(req.body.time !== null && req.body.time !== ""){
+            classObj.time = req.body.time;
+        }
+        if(req.body.duration !== null && req.body.duration !== ""){
+            classObj.duration = req.body.duration;
+        }
+        if(req.body.recurring !== null && req.body.recurring !== ""){
+            classObj.recurring = req.body.recurring;
+        }
+        if(req.body.price !== null && req.body.price !== ""){
+            classObj.price = req.body.price;
+        }
+        if(req.body.location !== null && req.body.location !== ""){
+            classObj.location = req.body.location;
+        }
+        if(req.body.reviews !== null && req.body.reviews !== ""){
+            classObj.reviews = req.body.reviews;
+        }
+      db.classDetails.update(classObj, {
+        where: {
+          userId: req.session.user.id,
+          id: req.params.id
+        }
+      }).then(data => {
+        res.json(data);
+      }).catch(err => { res.status(500).send(err.message); });
+  
+    }
+  });
 
 // ***************************************** D ****
 router.delete("classes/delete/:id",(req,res)=>{
  if (!req.session.user) {
     res.status(401).send("Unable to retrieve.")
-  } else {
+    } else {
     db.classDetails.destroy({
       where: {
         userId: req.session.user.id,
