@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
-const User = require("../models/user");
+const user = require("../models/user");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
@@ -14,28 +14,17 @@ router.post("/register", (req, res) => {
         lname: req.body.lname,
         email: req.body.email,
         uname: req.body.uname,
-        pw: req.body.pw
+        pw: req.body.pword
     }).then(data => {
         res.json(data);
     }).catch(err => {
         res.status(500).json(err);
     })
-    // db.User.create({
-    //     fname: req.body.fname,
-    //     lname: req.body.lname,
-    //     email: req.body.email,
-    //     uname: req.body.uname,
-    //     pw: req.body.pword
-    // }).then(data=>{
-    //     res.json(data);
-    // }).catch(err=>{
-    //     res.status(500).json(err);
-    // })
 })
 
 // ***************************************** R ****
 
-router.post("/login", (req, res) => {
+router.post("/check_login", (req, res) => {
     db.User.findOne({ //finds user
         where: {
             uname: req.body.uname
@@ -60,38 +49,7 @@ router.post("/login", (req, res) => {
     })
 })
 
-router.get("/:userId", async (req, res) => {
-    let oneUser = await db.User.findOne({
-        where: {
-            id: req.params.userId
-        }
-    })
-
-    res.json({
-        data: oneUser
-    })
-})
-
-router.get("/all", async (req, res) => {
-    let allUsers = await db.User.findAll()
-
-    res.json({
-        data: allUsers
-    })
-})
-
 // ***************************************** U ****
-router.post("/update/:userId", async (req, res) => {
-    let userToUpdate = await db.User.update(req.body,
-        {
-            where: {
-                id: req.params.userId
-            }
-        })
-    res.json({
-        data: userToUpdate
-    })
-})
 
 // ***************************************** D ****
 
