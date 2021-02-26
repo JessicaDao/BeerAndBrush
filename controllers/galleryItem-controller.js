@@ -8,102 +8,97 @@ const { jsxText } = require("@babel/types");
 
 
 // ***************************************** C ****
-router.post("/new",async (req,res)=>{
-    newGalleryItem = await db.GalleryItem.create({
+router.post("/new", (req, res) => {
+    db.GalleryItem.create({
         name: req.body.name,
         category: req.body.category,
         bio: req.body.bio,
         materialUsed: req.body.materialUsed,
         forSale: req.body.forSale
-    })
-
-    newGalleryItem.catch(err => {
+    }).then(resp => {
+        console.log(resp);
+        res.json({
+            data: resp
+        })
+    }).catch(err=> {
         console.log(err);
         res.status(500).json({
             data: err
         })
-    })
-
-    res.json({
-        data: newGalleryItem
     })
 })
 
 // ***************************************** R ****
 
-router.get("/:galleryItem_id", async (req, res) => {
-    let oneGalleryItem = await db.GalleryItem.findOne({
+router.get("/:galleryItemId", (req, res) => {
+    db.GalleryItem.findOne({
         where: {
-            id: req.params.galleryItem_id
+            id: req.params.galleryItemId
         }
-    })
-
-    oneGalleryItem.catch(err => {
-        console.log(err);
-        res.status(500).json({
-            data:err
+    }).then(resp => {
+        console.log(resp);
+        res.json({
+            data: resp
         })
-    })
-    
-    res.json({
-        data: oneGalleryItem
-    })
-})
-
-router.get("/all", async (req, res) => {
-    let allGalleries = await db.GalleryItem.findAll() 
-
-    allGalleries.catch(err => {
-        console.log(err);
-        res.status(500).json({
-            data:err
-        })
-    })
-
-    res.json({
-        data: allGalleries
-    })
-})
-
-// ***************************************** U ****
-router.post("/update/:galleryItem_id", async (req, res) => {
-    let galleryItemToUpdate = await db.GalleryItem.update(req.body,
-        {
-            where: {
-                id: req.params.galleryItem_id
-            }
-        })
-
-    galleryItemToUpdate.catch(err => {
-        console.log(err);
-        res.status(500).json({
-            data:err
-        })
-    })
-
-    res.json({
-        data: GalleryItemToUpdate
-    })
-})
-
-// ***************************************** D ****
-router.delete("/delete/:galleryItem_id", async (req, res) => {
-    let galleryItemToDelete = await db.GalleryItem.destroy({
-        where: {
-            id: req.params.galleryItem_id
-        }
-    })
-
-    galleryItemToDelete.catch(err => {
+    }).catch(err => {
         console.log(err);
         res.status(500).json({
             data: err
         })
     })
+})
 
-    res.json({
-        data: galleryItemToDelete,
-        msg: "successfully deleted"
+router.get("/all", (req, res) => {
+    db.GalleryItem.findAll()
+        .then(resp => {
+            console.log(resp);
+            res.json({
+                data:resp
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                data: err
+            })
+        })
+})
+
+// ***************************************** U ****
+router.post("/update/:galleryItemId", (req, res) => {
+    db.GalleryItem.update(req.body,
+        {
+            where: {
+                id: req.params.galleryItemId
+            }
+        }).then(resp => {
+            res.json({
+                data: resp
+            })
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                data: err
+            })
+        })
+})
+
+// ***************************************** D ****
+router.delete("/delete/:galleryItemId", (req, res) => {
+    db.GalleryItem.destroy({
+        where: {
+            id: req.params.galleryItemId
+        }
+    }).then(resp => {
+        console.log(resp);
+        res.json({
+            data: resp
+        })
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            data: err
+        })
     })
 })
 

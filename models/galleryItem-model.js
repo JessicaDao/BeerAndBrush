@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    var Gallery = sequelize.define('Gallery', {
+    var GalleryItem = sequelize.define('GalleryItem', {
         name: {
             type: DataTypes.STRING,
             allowNull: false
@@ -23,5 +23,5 @@ module.exports = function (sequelize, DataTypes) {
     });
     { timestamps: true }
 
-    return Gallery;
+    return GalleryItem;
 }

@@ -8,17 +8,22 @@ const { jsxText } = require("@babel/types");
 
 
 // ***************************************** C ****
-router.post("/register",(req,res)=>{
-    db.User.create({
+router.post("/register",async (req,res)=>{
+    const newUser = await db.User.create({
         fname: req.body.fname,
         lname: req.body.lname,
         email: req.body.email,
         uname: req.body.uname,
         pw: req.body.pw
-    }).then(data=>{
-        res.json(data);
-    }).catch(err=>{
-        res.status(500).json(err);
+    }).catch(err=> {
+        console.log(err);
+        res.status(500).json({
+            data: err
+        })
+    })
+
+    res.json({
+        data: newUser
     })
 })
 
@@ -54,6 +59,11 @@ router.get("/:user_id", async (req, res) => {
         where: {
             id: req.params.user_id
         }
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            data: err
+        })
     })
     
     res.json({
@@ -62,7 +72,13 @@ router.get("/:user_id", async (req, res) => {
 })
 
 router.get("/all", async (req, res) => {
-    let allUsers = await db.User.findAll() 
+    let allUsers = await db.User.findAll()
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            data:err
+        })
+    })
 
     res.json({
         data: allUsers
@@ -76,6 +92,11 @@ router.post("/update/:user_id", async (req, res) => {
             where: {
                 id: req.params.user_id
             }
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                data: err
+            })
         })
     res.json({
         data: userToUpdate
@@ -88,6 +109,11 @@ router.delete("/delete/:user_id", async (req, res) => {
         where: {
             id: req.params.user_id
         }
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            data:err
+        })
     })
     res.json({
         data: userToDelete,
