@@ -30,6 +30,26 @@ const authenticateMe = (req) => {
 }
 
 
+router.get("/", (req, res) => {
+  db.Review.findAll().then(reviews => {
+      res.json(reviews)
+  }).catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+  })
+})
+
+router.get("/reviews", (req, res) => {
+  db.Review.findAll({
+      include: [db.Review]
+  }).then(reviews => {
+      res.json(reviews)
+  }).catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+  })
+})
+
 router.post("/",(req,res)=>{
   const userData = authenticateMe(req);
   if (!userData) {
@@ -40,8 +60,8 @@ router.post("/",(req,res)=>{
         reviewer: req.body.level,
         content: req.body.date,
         UserId: req.session.user.id
-        }).then(data=>{
-            res.json(data);
+        }).then(newReview=>{
+            res.json(newReview);
             }).catch(err=>{
                 res.status(500).json(err);
             })
