@@ -60,10 +60,10 @@ router.post("/login", (req, res) => {
     })
 })
 
-router.get("/:user_id", async (req, res) => {
+router.get("/:userId", async (req, res) => {
     let oneUser = await db.User.findOne({
         where: {
-            id: req.params.user_id
+            id: req.params.userId
         }
     })
 
@@ -81,11 +81,11 @@ router.get("/all", async (req, res) => {
 })
 
 // ***************************************** U ****
-router.post("/update/:user_id", async (req, res) => {
+router.post("/update/:userId", async (req, res) => {
     let userToUpdate = await db.User.update(req.body,
         {
             where: {
-                id: req.params.user_id
+                id: req.params.userId
             }
         })
     res.json({

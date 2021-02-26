@@ -6,7 +6,6 @@
   "dependencies": {
     "axios": "^0.21.1",
     "babel": "^6.23.0",
-    "bcrpyt": "^2.0.0",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -26,13 +25,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/JessicaDao/BeerAndBrush.git"
-  },
-  "bugs": {
-    "url": "https://github.com/JessicaDao/BeerAndBrush/issues"
-  },
-  "homepage": "https://github.com/JessicaDao/BeerAndBrush#readme"
+  "license": "ISC"
 }

@@ -8,24 +8,40 @@ const { jsxText } = require("@babel/types");
 
 // ***************************************** C ****
 
+//working
 router.post("/new", (req, res) => {
+    // let user = await db.User.findOne({
+    //     where: {
+    //         id: req.body.userId
+    //     }
+    // })
+    console.log("********************")
+    console.log(req.body)
     db.Project.create({
         name: req.body.name,
         category: req.body.category,
+        UserId: req.body.UserId,
         bio: req.body.bio,
         materialUsed: req.body.materialUsed,
         forSale: req.body.forSale
-    }).then(data => {
-        res.json(data);
+    }).then(resp => {
+        res.json({
+            data: resp
+        })
     }).catch(err => {
         res.status(500).json(err);
     })
+
+    // res.json({
+    //     data: newProject
+    // })
 })
 
 
 
 // ***************************************** R ****
 
+//working
 router.get("/:project_id", async (req, res) => {
     let findProject = await db.Project.findOne(
         {
@@ -43,6 +59,7 @@ router.get("/:project_id", async (req, res) => {
 
 // ***************************************** U ****
 
+//not working
 router.put("/update/:project_id", async (req, res) => {
     let projectUpdate = await db.Project.update(req.body, {
 
@@ -58,6 +75,7 @@ router.put("/update/:project_id", async (req, res) => {
 
 // ***************************************** D ****
 
+//not working
 router.delete("delete/:project_id", async (req, res) => {
     let projectDelete = await db.Project.destroy({
 
