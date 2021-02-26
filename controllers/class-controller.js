@@ -6,14 +6,6 @@ const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 const classDetails = require("../models/class-details");
 
-
-router.get("/",(req,res)=>{
-    db.classDetails.findAll().then(data=>{
-        res.json(data)
-    }).catch(err=>{
-        res.status(500).json(err);
-    })
-})
 // ***************************************** C ****
 router.post("/",(req,res)=>{
     if(!req.session.user){
@@ -37,9 +29,15 @@ router.post("/",(req,res)=>{
             })
     }
 })
+
 // ***************************************** R ****
-
-
+router.get("/",(req,res)=>{
+    db.classDetails.findAll().then(data=>{
+        res.json(data)
+    }).catch(err=>{
+        res.status(500).json(err);
+    })
+})
 
 // ***************************************** U ****
 router.put("/classes/update/:id",(req,res) => {
@@ -101,8 +99,6 @@ router.delete("classes/delete/:id",(req,res)=>{
       res.redirect("/classes");
     }).catch(err => { res.status(500).send(err.message); });
   }
-
 });
-
 
 module.exports = router;
