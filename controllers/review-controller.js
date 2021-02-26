@@ -11,7 +11,7 @@ router.post("/",(req,res)=>{
     if(!req.session.user){
         res.status(401).send("Please login.")
     } else {
-    db.reviews.create({
+    db.Review.create({
         class: req.body.name,
         reviewer: req.body.level,
         content: req.body.date,
@@ -29,5 +29,19 @@ router.post("/",(req,res)=>{
 // ***************************************** U ****
 
 // ***************************************** D ****
-
+router.delete("/api/reviews/delete/:id", (req, res) => {
+    if (!req.session.user) {
+      res.status(401).send("Retry.")
+    } else {
+      db.Review.destroy({
+        where: {
+          userId: req.session.user.id,
+          id: req.params.id
+        }
+      }).then(data => {
+        res.json(data);
+        res.redirect("/reviews");
+      }).catch(err => { res.status(500).send(err.message); });
+    }
+  });
 module.exports = router;
