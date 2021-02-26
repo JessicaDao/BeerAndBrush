@@ -37,7 +37,29 @@ router.post("/", (req, res)=>{
             })
     }
 })
+// ***************************************** R ****
 
+
+
+// ***************************************** U ****
+
+// ***************************************** D ****
+router.delete("classes/delete/:id",(req,res)=>{
+ if (!req.session.user) {
+    res.status(401).send("Unable to retrieve.")
+  } else {
+    db.classDetails.destroy({
+      where: {
+        userId: req.session.user.id,
+        id: req.params.id
+      }
+    }).then(data => {
+      res.json(data);
+      res.redirect("/classes");
+    }).catch(err => { res.status(500).send(err.message); });
+  }
+
+});
 
 
 module.exports = router;
