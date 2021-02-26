@@ -96,7 +96,35 @@ router.delete("/delete/:user_id", async (req, res) => {
 })
 
 
-// Login
+// Shows current session
+router.get("/readsessions", (req,res)=>{
+    res.json(req.session)
+})
+
+// Check if signed in or not
+router.get("/secretclub", (req,res)=>{
+    if(req.session.user){
+        res.send(`Hello, ${req.session.user.uname}!`)
+    } else {
+        res.status(401).send("Please sign in!!")
+    }
+})
+
+
+// Destroy = deletes existing cookies
+router.get("/logout", (req, res)=>{
+    req.session.destroy();
+    res.send("Logged out.")
+    res.redirect("/");
+})
+
+module.exports = router;
+
+
+
+// **********************************************
+// ************************************ Notes ***
+// **********************************************
 
 
 // //Authentication - copy of Joe's demo, need edit
@@ -125,19 +153,7 @@ router.delete("/delete/:user_id", async (req, res) => {
 //     })
 // })
 
-// Shows current session
-router.get("/readsessions", (req,res)=>{
-    res.json(req.session)
-})
 
-// Check if signed in or not
-router.get("/secretclub", (req,res)=>{
-    if(req.session.user){
-        res.send(`Hello, ${req.session.user.uname}!`)
-    } else {
-        res.status(401).send("Please sign in!!")
-    }
-})
 
 // // Joe's demo, need edit
 // app.get("/secretclub", (req,res)=>{
@@ -169,12 +185,3 @@ router.get("/secretclub", (req,res)=>{
 //         }
 //     }
 // })
-
-// Destroy = deletes existing cookies
-router.get("/logout", (req, res)=>{
-    req.session.destroy();
-    res.send("Logged out.")
-    res.redirect("/");
-})
-
-module.exports = router;
