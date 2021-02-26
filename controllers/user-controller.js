@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
-const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 const jwt = require("jsonwebtoken");
@@ -36,7 +35,7 @@ router.get("/", (req, res) => {
     res.send("Currently on the home page.")
 })
 
-// ***************************************** C ****
+// Registration
 router.post("/register", (req,res)=>{
     db.User.create(req.body).then(newUser => {
         const token = jwt.sign ({
@@ -57,9 +56,7 @@ router.post("/register", (req,res)=>{
         })
     })
 })
-
-// ***************************************** R ****
-
+// Login
 router.post("/login",(req,res)=>{
     db.User.findOne({ //finds user
     where: {
@@ -83,67 +80,9 @@ router.post("/login",(req,res)=>{
     })
 })
 
-router.get("/:user_id", async (req, res) => {
-    let oneUser = await db.User.findOne({
-        where: {
-            id: req.params.user_id
-        }
-    }).catch(err=>{
-        console.log(err);
-        res.status(500).json({
-            data:err
-        })
-    })
-    res.json({
-        data: oneUser
-    })
-})
-
-router.get("/all", async (req, res) => {
-    let allUsers = await db.User.findAll() 
-    res.json({
-        data: allUsers
-    })
-})
-
-// ***************************************** U ****
-router.post("/update/:user_id", async (req, res) => {
-    let userToUpdate = await db.User.update(req.body,
-        {
-            where: {
-                id: req.params.user_id
-            }
-        })
-    res.json({
-        data: userToUpdate
-    })
-})
-
-// ***************************************** D ****
-router.delete("/delete/:user_id", async (req, res) => {
-    let userToDelete = await db.User.destroy({
-        where: {
-            id: req.params.user_id
-        }
-    })
-    res.json({
-        data: userToDelete,
-        msg: "successfully deleted"
-    })
-})
-
-
-// // Check if signed in or not
-// router.get("/secretclub", (req,res)=>{
-//     if(req.session.user){
-//         res.send(`Hello, ${req.session.user.uname}!`)
-//     } else {
-//         res.status(401).send("Please sign in!!")
-//     }
-// })
 
 // JWT secretclub
-app.get("/secretclub", (req,res)=>{
+router.get("/secretclub", (req,res)=>{
     let token = false;
     if(!req.headers){
         token=false
@@ -173,11 +112,70 @@ app.get("/secretclub", (req,res)=>{
     }
 })
 
-// Destroy = deletes existing cookies
-router.get("/logout", (req, res)=>{
-    req.session.destroy();
-    res.send("Logged out.")
-    res.redirect("/");
-})
 
 module.exports = router;
+
+
+
+// Destroy = deletes existing cookies
+// router.get("/logout", (req, res)=>{
+//     req.session.destroy();
+//     res.send("Logged out.")
+//     res.redirect("/");
+// })
+
+// router.get("/:user_id", async (req, res) => {
+//     let oneUser = await db.User.findOne({
+//         where: {
+//             id: req.params.user_id
+//         }
+//     }).catch(err=>{
+//         console.log(err);
+//         res.status(500).json({
+//             data:err
+//         })
+//     })
+//     res.json({
+//         data: oneUser
+//     })
+// })
+
+// router.get("/all", async (req, res) => {
+//     let allUsers = await db.User.findAll() 
+//     res.json({
+//         data: allUsers
+//     })
+// })
+
+// router.post("/update/:user_id", async (req, res) => {
+//     let userToUpdate = await db.User.update(req.body,
+//         {
+//             where: {
+//                 id: req.params.user_id
+//             }
+//         })
+//     res.json({
+//         data: userToUpdate
+//     })
+// })
+
+// router.delete("/delete/:user_id", async (req, res) => {
+//     let userToDelete = await db.User.destroy({
+//         where: {
+//             id: req.params.user_id
+//         }
+//     })
+//     res.json({
+//         data: userToDelete,
+//         msg: "successfully deleted"
+//     })
+// })
+
+// // Check if signed in or not
+// router.get("/secretclub", (req,res)=>{
+//     if(req.session.user){
+//         res.send(`Hello, ${req.session.user.uname}!`)
+//     } else {
+//         res.status(401).send("Please sign in!!")
+//     }
+// })
