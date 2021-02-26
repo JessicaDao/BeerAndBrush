@@ -48,24 +48,34 @@ router.post("/",(req,res)=>{
     }
 })
 
-// ***************************************** R ****
 
-// ***************************************** U ****
 
-// ***************************************** D ****
-router.delete("/api/reviews/delete/:id", (req, res) => {
-    if (!req.session.user) {
-      res.status(401).send("Retry.")
-    } else {
-      db.Review.destroy({
+router.delete("/:id", (req, res) => {
+  const userData = authenticateMe(req);
+      db.Review.findOne({
         where: {
-          userId: req.session.user.id,
           id: req.params.id
         }
-      }).then(data => {
-        res.json(data);
-        res.redirect("/reviews");
-      }).catch(err => { res.status(500).send(err.message); });
-    }
-  });
+      }).then(review => {
+        if(review.UserId===userData.id){
+          db.Review.destroy({
+              where:{
+                  id:req.params.id
+              }
+          }).then(delReview=>{
+              res.json(delReview)
+          }).catch(err=>{
+              console.log(err)
+              res.status(500).json(err)
+          })
+      }else {
+          res.status(403).send("Try again.")
+      }
+  }).catch(err=>{
+      console.log(err);
+      res.status(500).json(err)
+  })
+})
+
+
 module.exports = router;
