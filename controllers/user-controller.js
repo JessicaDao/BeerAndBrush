@@ -1,26 +1,29 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
-const user = require("../models/user");
+const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
-//Sign up
-router.post("/signup",(req,res)=>{
+
+
+// ***************************************** C ****
+router.post("/register",(req,res)=>{
     db.User.create({
         fname: req.body.fname,
         lname: req.body.lname,
         email: req.body.email,
         uname: req.body.uname,
-        pw: req.body.pword
+        pw: req.body.pw
     }).then(data=>{
-    res.json(data);
+        res.json(data);
     }).catch(err=>{
         res.status(500).json(err);
     })
 })
 
-// Login
+// ***************************************** R ****
+
 router.post("/login",(req,res)=>{
     db.User.findOne({ //finds user
     where: {
@@ -45,6 +48,56 @@ router.post("/login",(req,res)=>{
     }
     })
 })
+
+router.get("/:user_id", async (req, res) => {
+    let oneUser = await db.User.findOne({
+        where: {
+            id: req.params.user_id
+        }
+    })
+    
+    res.json({
+        data: oneUser
+    })
+})
+
+router.get("/all", async (req, res) => {
+    let allUsers = await db.User.findAll() 
+
+    res.json({
+        data: allUsers
+    })
+})
+
+// ***************************************** U ****
+router.post("/update/:user_id", async (req, res) => {
+    let userToUpdate = await db.User.update(req.body,
+        {
+            where: {
+                id: req.params.user_id
+            }
+        })
+    res.json({
+        data: userToUpdate
+    })
+})
+
+// ***************************************** D ****
+router.delete("/delete/:user_id", async (req, res) => {
+    let userToDelete = await db.User.destroy({
+        where: {
+            id: req.params.user_id
+        }
+    })
+    res.json({
+        data: userToDelete,
+        msg: "successfully deleted"
+    })
+})
+
+
+// Login
+
 
 // //Authentication - copy of Joe's demo, need edit
 // app.post('/login', (req, res)=>{
@@ -72,8 +125,6 @@ router.post("/login",(req,res)=>{
 //     })
 // })
 
-
-
 // Shows current session
 router.get("/readsessions", (req,res)=>{
     res.json(req.session)
@@ -87,7 +138,6 @@ router.get("/secretclub", (req,res)=>{
         res.status(401).send("Please sign in!!")
     }
 })
-
 
 // // Joe's demo, need edit
 // app.get("/secretclub", (req,res)=>{
@@ -119,8 +169,6 @@ router.get("/secretclub", (req,res)=>{
 //         }
 //     }
 // })
-
-
 
 // Destroy = deletes existing cookies
 router.get("/logout", (req, res)=>{

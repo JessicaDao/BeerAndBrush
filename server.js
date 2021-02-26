@@ -1,3 +1,4 @@
+const cors = require("cors")
 // Dependencies
 var express = require("express");
 // Sessions - generates server size cookies, stores data
@@ -5,6 +6,7 @@ const session = require("express-session");
 
 // Create an instance of the express app.
 const app = express();
+app.use(cors());
 
 // Set the port of our application
 // process.env.PORT lets the port be set by Heroku
@@ -35,15 +37,8 @@ app.use(express.static("public"));
 // Data
 
 // Routes
-// const controllers = require("./controllers/html-controllers")
-// app.use(controllers)
-require('./controllers/controller')(app)
-
-const userRoutes = require("./controllers/userController");
-const { brotliCompress } = require("zlib");
-app.use(userRoutes);
-
-
+app.use('/api/user', require("./controllers/user-controller"));
+app.use('/api/project', require('./controllers/project-controller'));
 
 
 // ----
