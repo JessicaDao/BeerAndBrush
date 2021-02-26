@@ -36,14 +36,21 @@ router.get("/", (req, res) => {
     res.send("Currently on the home page.")
 })
 
+
 // Registration
 router.post("/register", (req,res)=>{
     db.User.create(req.body).then(newUser => {
         const token = jwt.sign ({
+=======
+// ***************************************** C ****
+router.post("/register", (req, res) => {
+    db.User.create({
+
         fname: req.body.fname,
         lname: req.body.lname,
         email: req.body.email,
         uname: req.body.uname,
+
         pw: req.body.pw,
         }, "bananas",
         {
@@ -55,8 +62,26 @@ router.post("/register", (req,res)=>{
         res.status(500).json({
             data:err
         })
+=======
+        pw: req.body.pw
+    }).then(data => {
+        res.json(data);
+    }).catch(err => {
+        res.status(500).json(err);
+
     })
-})
+    // db.User.create({
+    //     fname: req.body.fname,
+    //     lname: req.body.lname,
+    //     email: req.body.email,
+    //     uname: req.body.uname,
+    //     pw: req.body.pword
+    // }).then(data=>{
+    //     res.json(data);
+    // }).catch(err=>{
+    //     res.status(500).json(err);
+    // })
+
 // Login
 router.post("/login",(req,res)=>{
     db.User.findOne({ //finds user
@@ -77,6 +102,32 @@ router.post("/login",(req,res)=>{
             return res.json({user, token});
         } else {
             res.status(401).send("Incorrect password. Try again.")
+=======
+
+// ***************************************** R ****
+
+router.post("/login", (req, res) => {
+    db.User.findOne({ //finds user
+        where: {
+            uname: req.body.uname
+        }
+    }).then(userData => {
+        if (!userData) {
+            req.session.destroy(); //resets cookie after failed 
+            res.json(404).send("User not found.")
+        } else {
+            if (bcrypt.compareSync(req.body.pw, userData.pw)) {
+                req.session.user = {
+                    id: userData.id,
+                    uname: userData.uname
+                }
+                //authenticate user
+                res.json(userData);
+            } else {
+                req.session.destroy(); //resets cookie after failed 
+                res.status(401).send("Incorrect password. Try again.")
+            }
+
         }
     })
 })
@@ -112,6 +163,42 @@ router.get("/secretclub", (req,res)=>{
         }
     }
 })
+=======
+router.get("/:userId", async (req, res) => {
+    let oneUser = await db.User.findOne({
+        where: {
+            id: req.params.userId
+        }
+    })
+
+    res.json({
+        data: oneUser
+    })
+})
+
+router.get("/all", async (req, res) => {
+    let allUsers = await db.User.findAll()
+
+    res.json({
+        data: allUsers
+    })
+})
+
+// ***************************************** U ****
+router.post("/update/:userId", async (req, res) => {
+    let userToUpdate = await db.User.update(req.body,
+        {
+            where: {
+                id: req.params.userId
+            }
+        })
+    res.json({
+        data: userToUpdate
+    })
+})
+
+// ***************************************** D ****
+
 
 
 module.exports = router;
@@ -147,6 +234,21 @@ module.exports = router;
 //         data: allUsers
 //     })
 // })
+=======
+// Shows current session
+router.get("/readsessions", (req, res) => {
+    res.json(req.session)
+})
+
+// Check if signed in or not
+router.get("/secretclub", (req, res) => {
+    if (req.session.user) {
+        res.send(`Hello, ${req.session.user.uname}!`)
+    } else {
+        res.status(401).send("Please sign in!!")
+    }
+})
+
 
 // router.post("/update/:user_id", async (req, res) => {
 //     let userToUpdate = await db.User.update(req.body,
@@ -160,6 +262,7 @@ module.exports = router;
 //     })
 // })
 
+
 // router.delete("/delete/:user_id", async (req, res) => {
 //     let userToDelete = await db.User.destroy({
 //         where: {
@@ -171,6 +274,14 @@ module.exports = router;
 //         msg: "successfully deleted"
 //     })
 // })
+=======
+// Destroy = deletes existing cookies
+router.get("/logout", (req, res) => {
+    req.session.destroy();
+    res.send("Logged out.")
+    res.redirect("/");
+})
+
 
 // // Check if signed in or not
 // router.get("/secretclub", (req,res)=>{

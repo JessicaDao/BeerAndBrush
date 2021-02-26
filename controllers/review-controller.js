@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
 
+jd-switchjwt
 const authenticateMe = (req) => {
   let token = false;
   if (!req.headers) {
@@ -66,10 +67,16 @@ router.post("/",(req,res)=>{
                 res.status(500).json(err);
             })
     }
+=======
+// ***************************************** C ****
+router.post("/new", (req, res) => {
+    // db.
+
 })
 
 
 
+jd-switchjwt
 router.delete("/:id", (req, res) => {
   const userData = authenticateMe(req);
       db.Review.findOne({
@@ -96,6 +103,9 @@ router.delete("/:id", (req, res) => {
       res.status(500).json(err)
   })
 })
+
+=======
+// ***************************************** D ****
 
 
 module.exports = router;
