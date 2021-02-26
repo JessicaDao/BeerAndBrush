@@ -4,21 +4,57 @@ const db = require("../models");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
+const jwt = require("jsonwebtoken");
 
 
+const authenticateMe = (req) => {
+    let token = false;
+    if (!req.headers) {
+        token = false
+    }
+    else if (!req.headers.authorization) {
+        token = false;
+    }
+    else {
+        token = req.headers.authorization.split(" ")[1];
+    }
+    let data = false;
+    if (token) {
+        data = jwt.verify(token, "bananas", (err, data) => {
+            if (err) {
+                return false;
+            } else {
+                return data
+            }
+        })
+    }
+    return data;
+}
+
+// Home Page
+router.get("/", (req, res) => {
+    res.send("Currently on the home page.")
+})
 
 // ***************************************** C ****
-router.post("/register",(req,res)=>{
-    db.User.create({
+router.post("/register", (req,res)=>{
+    db.User.create(req.body).then(newUser => {
+        const token = jwt.sign ({
         fname: req.body.fname,
         lname: req.body.lname,
         email: req.body.email,
         uname: req.body.uname,
-        pw: req.body.pw
-    }).then(data=>{
-        res.json(data);
+        pw: req.body.pw,
+        }, "bananas",
+        {
+            expiresIn: "2h"
+        })
+        return res.json({ user: newUser, token })
     }).catch(err=>{
-        res.status(500).json(err);
+        console.log(err);
+        res.status(500).json({
+            data:err
+        })
     })
 })
 
@@ -54,8 +90,12 @@ router.get("/:user_id", async (req, res) => {
         where: {
             id: req.params.user_id
         }
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json({
+            data:err
+        })
     })
-    
     res.json({
         data: oneUser
     })
@@ -63,7 +103,6 @@ router.get("/:user_id", async (req, res) => {
 
 router.get("/all", async (req, res) => {
     let allUsers = await db.User.findAll() 
-
     res.json({
         data: allUsers
     })
