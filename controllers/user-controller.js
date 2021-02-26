@@ -4,6 +4,7 @@ const db = require("../models");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 const jwt = require("jsonwebtoken");
+const user = require("../models/user");
 
 
 const authenticateMe = (req) => {
@@ -62,13 +63,13 @@ router.post("/login",(req,res)=>{
     where: {
         uname:req.body.uname
     }
-}).then(userData=>{
-    if(!userData){
+}).then(user=>{
+    if(!user){
         res.json(404).send("User not found.")
-    } else if(bcrypt.compareSync(req.body.pw, userData.pw)){
+    } else if(bcrypt.compareSync(req.body.pw, user.pw)){
         const token = jwt.sign({
-                id: userData.id,
-                uname: userData.uname
+                id: user.id,
+                uname: user.uname
             }, "bananas",
             {
                 expiresIn: "2h"
