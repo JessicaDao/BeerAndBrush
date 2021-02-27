@@ -26,17 +26,17 @@ const authenticateMe = (req) => {
         })
     }
     return data;
-  }
+}
 
 // ***************************************** C ****
 //working
-router.post("/new", (req,res)=>{
+router.post("/new", (req, res) => {
     // let user = await db.User.findOne({
     //     where: {
     //         id: req.body.userId
     //     }
     // })
-    console.log(req.body) 
+    // console.log(req.body)
     db.Project.create({
         name: req.body.name,
         category: req.body.category,
@@ -69,31 +69,47 @@ router.get("/:project_id", async (req, res) => {
         msg: "Project found."
     })
 })
-//TODO: Do we need a findAll option? Would that be specific to user id as well?
+// Do we need a findAll option? Would that be specific to user id as well?
+
 // ***************************************** U ****
 //not working
-router.put("/update/:project_id", async (req, res) => {
-    let projectUpdate = await db.Project.update(req.body, {
+router.put("/update/:project_id", (req, res) => {
+    db.Project.update(req.body, {
         where: {
             id: req.params.project_id
         }
+    }).then(resp => {
+        res.json({
+            data: resp
+        })
+    }).catch(err => {
+        res.status(500).json(err);
     })
-    res.json({
-        data: projectUpdate,
-        msg:"Project updated."
-    })
+
+
+    // res.json({
+    //     data: projectUpdate,
+    //     msg: "Project updated."
+    // })
 })
 // ***************************************** D ****
 //not working
-router.delete("delete/:project_id", async (req, res) => {
-    let projectDelete = await db.Project.destroy({
+router.delete("delete/:project_id", (req, res) => {
+    console.log("delete")
+    db.Project.destroy({
         where: {
             id: req.params.project_id
         }
+    }).then(resp => {
+        res.json({
+            data: resp
+        })
+    }).catch(err => {
+        res.status(500).json(err);
     })
-    res.json({
-        data: projectDelete,
-        msg: "Project deleted."
-    })
+    // res.json({
+    //     data: projectDelete,
+    //     msg: "Project deleted."
+    // })
 })
 module.exports = router;
