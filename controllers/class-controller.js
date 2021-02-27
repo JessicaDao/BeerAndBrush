@@ -31,10 +31,17 @@ const authenticateMe = (req) => {
 }
 // ***************************************** C ****
 router.post("/",(req,res)=>{
-    if(!req.session.user){
-        res.status(401).send("Please login.")
+    const userData = authenticateMe(req);
+    if(!userData){
+        res.status(403).send("login first man");
     } else {
-    db.classDetails.create({
+        db.Classes.findOne({
+            where:{
+                id:req.body.classes
+            }
+        }).then(classes=>{
+            if(classes.UserId===userData.id){
+                db.Class.create({
         name: req.body.name,
         level: req.body.level,
         date: req.body.date,
@@ -44,14 +51,24 @@ router.post("/",(req,res)=>{
         location: req.body.location,
         price: req.body.price,
         reviews: req.body.reviews,
-        UserId: req.session.user.id
-        }).then(data=>{
-            res.json(data);
-            }).catch(err=>{
-                res.status(500).json(err);
-            })
-    }
+        UserId: userData.id
+    }).then(newClass=>{
+        res.json(newClass)
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json(err);
+    })
+} else {
+    res.status(403).send("Wrong profile.")
+}
+}).catch(err=>{
+console.log(err);
+res.status(500).json(err);
 })
+
+}
+})
+
 
 // ***************************************** R ****
 router.get("/",(req,res)=>{
@@ -108,21 +125,33 @@ router.put("/classes/update/:id",(req,res) => {
   });
 
 // ***************************************** D ****
-router.delete("classes/delete/:id",(req,res)=>{
- if (!req.session.user) {
-    res.status(401).send("Unable to retrieve.")
-    } else {
-    db.classDetails.destroy({
-      where: {
-        userId: req.session.user.id,
-        id: req.params.id
-      }
-    }).then(data => {
-      res.json(data);
-      res.redirect("/classes");
-    }).catch(err => { res.status(500).send(err.message); });
-  }
-});
+
+router.delete("/:id",(req,res)=>{
+    const userData = authenticateMe(req);
+    db.Class.findOne({
+        where:{
+            id:req.params.id
+        }
+    }).then(classObj=>{
+        if(classObj.UserId===userData.id){
+            db.Class.destroy({
+                where:{
+                    id:req.params.id
+                }
+            }).then(delClass=>{
+                res.json(delClass)
+            }).catch(err=>{
+                console.log(err)
+                res.status(500).json(err)
+            })
+        } else {
+            res.status(403).send("not your fish")
+        }
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json(err)
+    })
+})
 
 module.exports = router;
 
