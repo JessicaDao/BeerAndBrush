@@ -4,11 +4,6 @@ const db = require("../models");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
-<<<<<<< HEAD
-=======
-
-jd-switchjwt
->>>>>>> 1fb823839fa775dd28e2f8f3cbee7d953c13e710
 const authenticateMe = (req) => {
   let token = false;
   if (!req.headers) {
@@ -75,7 +70,6 @@ router.post("/", (req, res) => {
             .then((newReview) => {
               res.json(newReview);
             })
-<<<<<<< HEAD
             .catch((err) => {
               console.log(err);
               res.status(500).json(err);
@@ -90,19 +84,7 @@ router.post("/", (req, res) => {
       });
   }
 });
-=======
-    }
-=======
-// ***************************************** C ****
-router.post("/new", (req, res) => {
-    // db.
 
-})
-
-
->>>>>>> 1fb823839fa775dd28e2f8f3cbee7d953c13e710
-
-jd-switchjwt
 router.delete("/:id", (req, res) => {
   const userData = authenticateMe(req);
   db.Review.findOne({
@@ -130,18 +112,8 @@ router.delete("/:id", (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-<<<<<<< HEAD
       res.status(500).json(err);
     });
 });
-=======
-      res.status(500).json(err)
-  })
-})
-
-=======
-// ***************************************** D ****
-
->>>>>>> 1fb823839fa775dd28e2f8f3cbee7d953c13e710
 
 module.exports = router;

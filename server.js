@@ -42,7 +42,7 @@ app.use('/api/project', require('./controllers/project-controller'));
 app.use('/api/reviews', require('./controllers/review-controller'));
 app.use('/api/gallery', require('./controllers/gallery-controller'));
 app.use('/api/classes', require('./controllers/class-controller'));
-app.use('/api/portfolio', require('./controllers/portfolio'));
+app.use('/api/portfolio', require('./controllers/portfolio-controller'));
 
 // ----
 

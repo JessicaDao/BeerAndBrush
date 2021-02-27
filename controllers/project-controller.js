@@ -29,25 +29,14 @@ const authenticateMe = (req) => {
   }
 
 // ***************************************** C ****
-<<<<<<< HEAD
 //working
 router.post("/new", (req,res)=>{
-=======
-
-//working
-router.post("/new", (req, res) => {
->>>>>>> 1fb823839fa775dd28e2f8f3cbee7d953c13e710
     // let user = await db.User.findOne({
     //     where: {
     //         id: req.body.userId
     //     }
     // })
-<<<<<<< HEAD
     console.log(req.body) 
-=======
-    console.log("********************")
-    console.log(req.body)
->>>>>>> 1fb823839fa775dd28e2f8f3cbee7d953c13e710
     db.Project.create({
         name: req.body.name,
         category: req.body.category,
@@ -62,23 +51,11 @@ router.post("/new", (req, res) => {
     }).catch(err => {
         res.status(500).json(err);
     })
-<<<<<<< HEAD
-=======
-
->>>>>>> 1fb823839fa775dd28e2f8f3cbee7d953c13e710
     // res.json({
     //     data: newProject
     // })
 })
-<<<<<<< HEAD
 // ***************************************** R ****
-=======
-
-
-
-// ***************************************** R ****
-
->>>>>>> 1fb823839fa775dd28e2f8f3cbee7d953c13e710
 //working
 router.get("/:project_id", async (req, res) => {
     let findProject = await db.Project.findOne(
@@ -89,7 +66,6 @@ router.get("/:project_id", async (req, res) => {
         })
     res.json({
         data: findProject,
-<<<<<<< HEAD
         msg: "Project found."
     })
 })
@@ -98,27 +74,12 @@ router.get("/:project_id", async (req, res) => {
 //not working
 router.put("/update/:project_id", async (req, res) => {
     let projectUpdate = await db.Project.update(req.body, {
-=======
-        msg: "project found"
-    })
-})
-
-//TODO: Do we need a findAll option? Would that be specific to user id as well?
-
-// ***************************************** U ****
-
-//not working
-router.put("/update/:project_id", async (req, res) => {
-    let projectUpdate = await db.Project.update(req.body, {
-
->>>>>>> 1fb823839fa775dd28e2f8f3cbee7d953c13e710
         where: {
             id: req.params.project_id
         }
     })
     res.json({
         data: projectUpdate,
-<<<<<<< HEAD
         msg:"Project updated."
     })
 })
@@ -126,33 +87,13 @@ router.put("/update/:project_id", async (req, res) => {
 //not working
 router.delete("delete/:project_id", async (req, res) => {
     let projectDelete = await db.Project.destroy({
-=======
-        msg: "project updated"
-    })
-})
-
-// ***************************************** D ****
-
-//not working
-router.delete("delete/:project_id", async (req, res) => {
-    let projectDelete = await db.Project.destroy({
-
->>>>>>> 1fb823839fa775dd28e2f8f3cbee7d953c13e710
         where: {
             id: req.params.project_id
         }
     })
     res.json({
         data: projectDelete,
-<<<<<<< HEAD
         msg: "Project deleted."
     })
 })
-=======
-        msg: "project deleted"
-    })
-})
-
-
->>>>>>> 1fb823839fa775dd28e2f8f3cbee7d953c13e710
 module.exports = router;

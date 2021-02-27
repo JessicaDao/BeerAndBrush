@@ -34,7 +34,6 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-<<<<<<< HEAD
 // db.User = require(“./user.js”)(sequelize, Sequelize);
 // db.Project = require(“./project.js”)(sequelize, Sequelize);
 // db.User.hasMany(db.Project, { as: “ProjectId” });
@@ -43,16 +42,5 @@ db.Sequelize = Sequelize;
 //   as: “User”,
 // });
 
-
-=======
-db.User = require("./user.js")(sequelize, Sequelize);
-db.Project = require("./project.js")(sequelize, Sequelize);
-
-db.User.hasMany(db.Project, { as: "ProjectId" });
-db.Project.belongsTo(db.User, {
-  foreignKey: "UserId",
-  as: "User",
-});
->>>>>>> 1fb823839fa775dd28e2f8f3cbee7d953c13e710
 
 module.exports = db;
