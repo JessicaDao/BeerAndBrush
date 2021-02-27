@@ -72,7 +72,7 @@ res.status(500).json(err);
 
 // ***************************************** R ****
 router.get("/",(req,res)=>{
-    db.classDetails.findAll().then(data=>{
+    db.Classes.findAll().then(data=>{
         res.json(data)
     }).catch(err=>{
         res.status(500).json(err);
