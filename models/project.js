@@ -23,8 +23,9 @@ module.exports = function (sequelize, DataTypes) {
     });
     { timestamps: true }
 
-    Project.associate = function(models){
-        Project.belongsTo(models.User);
-    };
+    // User.associate = function(models){
+    //     User.hasMany(models._____);
+    // };
+
     return Project;
 }

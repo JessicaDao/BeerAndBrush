@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3001;
 const db = require("./models");
 
 // Set up Express app to handle data parsing
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 
@@ -46,7 +46,7 @@ app.use('/api/portfolio', require('./controllers/portfolio'));
 
 // ----
 
-db.sequelize.sync({force: false}).then(function () { // Start our server so that it can begin listening to client requests.
+db.sequelize.sync({ force: false }).then(function () { // Start our server so that it can begin listening to client requests.
     app.listen(PORT, function () { // Log (server-side) when our server has started
         console.log("Server listening on: http://localhost:" + PORT);
     });
