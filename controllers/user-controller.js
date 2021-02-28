@@ -36,43 +36,43 @@ router.get("/", (req, res) => {
 })
 
 // Registration
-router.post("/register", (req,res)=>{
+router.post("/register", (req, res) => {
     db.User.create(req.body).then(newUser => {
-        const token = jwt.sign ({
-        fname: req.body.fname,
-        lname: req.body.lname,
-        email: req.body.email,
-        uname: req.body.uname,
-        pw: req.body.pw,
+        const token = jwt.sign({
+            fname: req.body.fname,
+            lname: req.body.lname,
+            email: req.body.email,
+            uname: req.body.uname,
+            pw: req.body.pw,
         }, "bananas",
-        {
-            expiresIn: "2h"
-        })
+            {
+                expiresIn: "2h"
+            })
         return res.json({ user: newUser, token })
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).json(err);
     })
 })
 
 // Login
-router.post("/login",(req,res)=>{
+router.post("/login", (req, res) => {
     db.User.findOne({ //finds user
-    where: {
-        uname:req.body.uname
-    }
-}).then(user=>{
-    if(!user){
-        res.json(404).send("User not found.")
-    } else if(bcrypt.compareSync(req.body.pw, user.pw)){
-        const token = jwt.sign({
+        where: {
+            uname: req.body.uname
+        }
+    }).then(user => {
+        if (!user) {
+            res.json(404).send("User not found.")
+        } else if (bcrypt.compareSync(req.body.pw, user.pw)) {
+            const token = jwt.sign({
                 id: user.id,
                 uname: user.uname
             }, "bananas",
-            {
-                expiresIn: "2h"
-            })
-            return res.json({user, token})
+                {
+                    expiresIn: "2h"
+                })
+            return res.json({ user, token })
         } else {
             res.status(401).send("Incorrect password. Try again.")
         }
@@ -99,18 +99,18 @@ router.get("/:userId", (req, res) => {
 
 router.get("/all", (req, res) => {
     db.User.findAll()
-    .then(resp => {
-        console.log(resp);
-        res.json({
-            data:resp
+        .then(resp => {
+            console.log(resp);
+            res.json({
+                data: resp
+            })
         })
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            data:err
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                data: err
+            })
         })
-    })
 })
 
 // ***************************************** U ****
@@ -131,6 +131,7 @@ router.post("/update/:userId", (req, res) => {
             res.status(500).json({
                 data: err
             })
+        })
 })
 
 // ***************************************** D ****
@@ -149,7 +150,7 @@ router.delete("/delete/:user_id", (req, res) => {
     }).catch(err => {
         console.log(err);
         res.status(500).json({
-            data:err
+            data: err
         })
     })
 })
@@ -157,16 +158,16 @@ router.delete("/delete/:user_id", (req, res) => {
 // **********************************************
 
 // JWT secretclub
-router.get("/secretclub", (req,res)=>{
+router.get("/secretclub", (req, res) => {
     let tokenData = authenticateMe(req);
     if (tokenData) {
         db.User.findOne({
             where: {
                 id: tokenData.id
             }
-        }).then(user=>{
+        }).then(user => {
             res.json(user)
-        }).catch(err=>{
+        }).catch(err => {
             res.status(500).json(err);
         })
     } else {
@@ -175,48 +176,3 @@ router.get("/secretclub", (req,res)=>{
 })
 
 module.exports = router;
-
-
-
-// **********************************************
-// ************************************ Notes ***
-// **********************************************
-
-
-// Destroy = deletes existing cookies
-// router.get("/logout", (req, res)=>{
-//     req.session.destroy();
-//     res.send("Logged out.")
-//     res.redirect("/");
-// })
-
-// router.get("/:user_id", async (req, res) => {
-//     let oneUser = await db.User.findOne({
-//         where: {
-//             id: req.params.user_id
-//         }
-//     }).catch(err=>{
-//         console.log(err);
-//         res.status(500).json({
-//             data:err
-//         })
-//     })
-//     res.json({
-//         data: oneUser
-//     })
-// })
-
-// router.post("/update/:user_id", async (req, res) => {
-//     let userToUpdate = await db.User.update(req.body,
-//         {
-//             where: {
-//                 id: req.params.user_id
-//             }
-//         })
-//         if(data){
-//             res.send("Welcome, ${data.email}")
-//         } else {
-//             res.status(403).send("Auth failed.")
-//         }
-//     }
-// })

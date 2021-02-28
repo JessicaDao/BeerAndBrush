@@ -104,10 +104,7 @@ dist
 # TernJS port file
 .tern-port
 
-<<<<<<< HEAD
 .vscode
 .vscode/settings.json
-=======
 
 .DS_Store
->>>>>>> 6126c368c997712a4997f109631dd949b2cb8f3a
