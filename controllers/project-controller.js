@@ -80,7 +80,8 @@ router.put("/update/:project_id", (req, res) => {
         }
     }).then(resp => {
         res.json({
-            data: resp
+            data: resp,
+            msg: "Project updated."
         })
     }).catch(err => {
         res.status(500).json(err);
@@ -94,21 +95,21 @@ router.put("/update/:project_id", (req, res) => {
 })
 // ***************************************** D ****
 //not working
-router.delete("delete/:project_id", (req, res) => {
-    console.log("delete")
+router.delete("/delete/:project_id", (req, res) => {
     db.Project.destroy({
         where: {
             id: req.params.project_id
         }
     }).then(resp => {
         res.json({
-            data: resp
+            data: resp,
+            msg: "Project deleted."
         })
     }).catch(err => {
         res.status(500).json(err);
     })
     // res.json({
-    //     data: projectDelete,
+    //     // data: projectDelete,
     //     msg: "Project deleted."
     // })
 })
