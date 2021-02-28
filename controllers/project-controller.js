@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
-const user = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
@@ -27,10 +26,9 @@ const authenticateMe = (req) => {
         })
     }
     return data;
-  }
+}
 
 // ***************************************** C ****
-
 //working
 router.post("/new", (req, res) => {
     // let user = await db.User.findOne({
@@ -38,8 +36,7 @@ router.post("/new", (req, res) => {
     //         id: req.body.userId
     //     }
     // })
-    console.log("********************")
-    console.log(req.body)
+    // console.log(req.body)
     db.Project.create({
         name: req.body.name,
         category: req.body.category,
@@ -54,16 +51,11 @@ router.post("/new", (req, res) => {
     }).catch(err => {
         res.status(500).json(err);
     })
-
     // res.json({
     //     data: newProject
     // })
 })
-
-
-
 // ***************************************** R ****
-
 //working
 router.get("/:project_id", async (req, res) => {
     let findProject = await db.Project.findOne(
@@ -74,43 +66,51 @@ router.get("/:project_id", async (req, res) => {
         })
     res.json({
         data: findProject,
-        msg: "project found"
+        msg: "Project found."
     })
 })
-
-//TODO: Do we need a findAll option? Would that be specific to user id as well?
+// Do we need a findAll option? Would that be specific to user id as well?
 
 // ***************************************** U ****
-
 //not working
-router.put("/update/:project_id", async (req, res) => {
-    let projectUpdate = await db.Project.update(req.body, {
-
+router.put("/update/:project_id", (req, res) => {
+    db.Project.update(req.body, {
         where: {
             id: req.params.project_id
         }
+    }).then(resp => {
+        res.json({
+            data: resp,
+            msg: "Project updated."
+        })
+    }).catch(err => {
+        res.status(500).json(err);
     })
-    res.json({
-        data: projectUpdate,
-        msg: "project updated"
-    })
-})
 
+
+    // res.json({
+    //     data: projectUpdate,
+    //     msg: "Project updated."
+    // })
+})
 // ***************************************** D ****
-
 //not working
-router.delete("delete/:project_id", async (req, res) => {
-    let projectDelete = await db.Project.destroy({
-
+router.delete("/delete/:project_id", (req, res) => {
+    db.Project.destroy({
         where: {
             id: req.params.project_id
         }
+    }).then(resp => {
+        res.json({
+            data: resp,
+            msg: "Project deleted."
+        })
+    }).catch(err => {
+        res.status(500).json(err);
     })
-    res.json({
-        data: projectDelete,
-        msg: "project deleted"
-    })
+    // res.json({
+    //     // data: projectDelete,
+    //     msg: "Project deleted."
+    // })
 })
-
-
 module.exports = router;
