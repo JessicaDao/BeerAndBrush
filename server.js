@@ -39,6 +39,7 @@ app.use(express.static("public"));
 // Routes
 app.use('/api/user', require("./controllers/user-controller"));
 app.use('/api/project', require('./controllers/project-controller'));
+app.use('/api/galleryItem', require('./controllers/galleryItem-controller'))
 app.use('/api/reviews', require('./controllers/review-controller'));
 app.use('/api/gallery', require('./controllers/gallery-controller'));
 app.use('/api/classes', require('./controllers/class-controller'));
