@@ -31,18 +31,13 @@ const authenticateMe = (req) => {
 // ***************************************** C ****
 //working
 router.post("/new", (req, res) => {
-    // let user = await db.User.findOne({
-    //     where: {
-    //         id: req.body.userId
-    //     }
-    // })
-    // console.log(req.body)
     db.Project.create({
         name: req.body.name,
-        category: req.body.category,
-        UserId: req.body.UserId,
-        bio: req.body.bio,
+        dateStarted: req.body.dateStarted,
+        dateFinished: req.body.dateFinished,
+        description: req.body.description,
         materialUsed: req.body.materialUsed,
+        category: req.body.category,
         forSale: req.body.forSale
     }).then(resp => {
         res.json({
@@ -51,10 +46,8 @@ router.post("/new", (req, res) => {
     }).catch(err => {
         res.status(500).json(err);
     })
-    // res.json({
-    //     data: newProject
-    // })
 })
+
 // ***************************************** R ****
 //working
 router.get("/:project_id", async (req, res) => {
