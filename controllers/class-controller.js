@@ -4,7 +4,6 @@ const db = require("../models");
 const user = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
-const classDetails = require("../models/classes");
 
 const authenticateMe = (req) => {
     let token = false;
