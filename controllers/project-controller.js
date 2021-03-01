@@ -4,7 +4,7 @@ const db = require("../models");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
-const User = require("../model/user"); 
+const User = require("../models/user-model"); 
 const cloudinary = require("../utils/cloudinary");
 const upload = require("../utils/multer");
 
@@ -127,6 +127,21 @@ router.put("/update/:project_id", (req, res) => {
     // })
 })
 // ***************************************** D ****
+//Cloudinary delete
+router.delete("/:id", async (req, res) => {
+    try {
+      // Find user by id
+      let user = await User.findById(req.params.id);
+      // Delete image from cloudinary
+      await cloudinary.uploader.destroy(user.cloudinary_id);
+      // Delete user from db
+      await user.remove();
+      res.json(user);
+    } catch (err) {
+      console.log(err);
+    }});
+
+//Project delete
 router.delete("/delete/:project_id", (req, res) => {
     const userData = authenticateMe(req);
     db.Project.findOne({
