@@ -104,23 +104,35 @@ router.put("/update/:project_id", (req, res) => {
     // })
 })
 // ***************************************** D ****
-//not working
 router.delete("/delete/:project_id", (req, res) => {
-    db.Project.destroy({
-        where: {
-            id: req.params.project_id
-        }
-    }).then(resp => {
-        res.json({
-            data: resp,
-            msg: "Project deleted."
-        })
-    }).catch(err => {
-        res.status(500).json(err);
+    const userData = authenticateMe(req);
+    db.Project.findOne({
+      where: {
+        id: req.params.id,
+      },
     })
-    // res.json({
-    //     // data: projectDelete,
-    //     msg: "Project deleted."
-    // })
-})
+      .then((project) => {
+        if (project.UserId === userData.id) {
+          db.Project.destroy({
+            where: {
+              id: req.params.id,
+            },
+          })
+            .then((delProject) => {
+              res.json(delProject);
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(500).json(err);
+            });
+        } else {
+          res.status(403).send("Try again.");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  });
+  
 module.exports = router;
