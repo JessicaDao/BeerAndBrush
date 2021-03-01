@@ -14,12 +14,7 @@ module.exports = function(sequelize, DataTypes){
       email: {
         type:DataTypes.STRING,
         unique:true,
-        allowNull:false,
-        // TODO: look in to how to validate with Regex
-        // validate: {
-        //   validator: (val) => /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/.test(val),
-        //         message: "Please enter a valid email!"
-        // }
+        allowNull:false
     },
       uname:{
         type:DataTypes.STRING,
@@ -35,8 +30,12 @@ module.exports = function(sequelize, DataTypes){
     },
     { timestamps: true }
 );
+
     // User.associate = function(models){
-    //     User.hasMany(models._____);
+    //     User.hasMany(models.classes);
+    //     User.hasMany(models.project);
+    //     User.hasMany(models.reviews);
+
     // };
 
 //encrypts password
@@ -46,4 +45,3 @@ module.exports = function(sequelize, DataTypes){
     
     return User;
 }
-

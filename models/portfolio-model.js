@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    var Project = sequelize.define('Project', {
+    var Portfolio = sequelize.define('Portfolio', {
         name: {
             type: DataTypes.STRING,
             allowNull: false
@@ -23,8 +23,5 @@ module.exports = function (sequelize, DataTypes) {
     });
     { timestamps: true }
 
-    Project.associate = function(models){
-        Project.belongsTo(models.User);
-    };
-    return Project;
+    return Portfolio;
 }
