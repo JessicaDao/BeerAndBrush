@@ -4,10 +4,6 @@ const db = require("../models");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
-<<<<<<< HEAD
-
-=======
->>>>>>> fcba65bca39530c597bbe979acb482a4a1ac70c9
 const authenticateMe = (req) => {
   let token = false;
   if (!req.headers) {
@@ -74,25 +70,12 @@ router.post("/", (req, res) => {
             .then((newReview) => {
               res.json(newReview);
             })
-<<<<<<< HEAD
-    }
-
-=======
             .catch((err) => {
               console.log(err);
               res.status(500).json(err);
             });
-        } else {
-          res.status(403).send("Wrong reviewer.");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-      });
-  }
+          }
 });
->>>>>>> fcba65bca39530c597bbe979acb482a4a1ac70c9
 
 router.delete("/:id", (req, res) => {
   const userData = authenticateMe(req);
@@ -101,8 +84,8 @@ router.delete("/:id", (req, res) => {
       id: req.params.id,
     },
   })
-    .then((reviewDel) => {
-      if (reviewDel.UserId === userData.id) {
+    .then((review) => {
+      if (review.UserId === userData.id) {
         db.Review.destroy({
           where: {
             id: req.params.id,
@@ -121,16 +104,8 @@ router.delete("/:id", (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-<<<<<<< HEAD
-      res.status(500).json(err)
-  })
-})
-
-
-=======
       res.status(500).json(err);
     });
 });
->>>>>>> fcba65bca39530c597bbe979acb482a4a1ac70c9
 
 module.exports = router;
