@@ -9,12 +9,14 @@ const { jsxText } = require("@babel/types");
 
 // ***************************************** C ****
 router.post("/new", (req, res) => {
-    db.GalleryItem.create({
+    db.Project.create({
         name: req.body.name,
-        category: req.body.category,
-        bio: req.body.bio,
+        dateStarted: req.body.dateStarted,
+        dateFinished: req.body.dateFinished,
+        description: req.body.description,
         materialUsed: req.body.materialUsed,
-        forSale: req.body.forSale
+        category: req.body.category,
+        forSale: req.body.forSale,
     }).then(resp => {
         console.log(resp);
         res.json({
@@ -30,11 +32,12 @@ router.post("/new", (req, res) => {
 
 // ***************************************** R ****
 
-router.get("/:galleryItemId", (req, res) => {
-    db.GalleryItem.findOne({
+router.get("/:id/gallery", (req, res) => {
+    db.Project.findOne({
         where: {
-            id: req.params.galleryItemId
-        }
+            id: req.params.id
+        },
+        include: [db.Project]
     }).then(resp => {
         console.log(resp);
         res.json({
@@ -49,7 +52,7 @@ router.get("/:galleryItemId", (req, res) => {
 })
 
 router.get("/all", (req, res) => {
-    db.GalleryItem.findAll()
+    db.Project.findAll()
         .then(resp => {
             console.log(resp);
             res.json({
@@ -65,7 +68,7 @@ router.get("/all", (req, res) => {
 })
 
 // ***************************************** U ****
-router.post("/update/:galleryItemId", (req, res) => {
+router.post("/update/:gallery", (req, res) => {
     db.GalleryItem.update(req.body,
         {
             where: {

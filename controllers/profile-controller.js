@@ -28,7 +28,7 @@ const authenticateMe = (req) => {
 };
 
 router.get("/", (req, res) => {
-  db.Portfolio.findAll()
+  db.Profile.findAll()
     .then((portfolios) => {
       res.json(portfolios);
     })
@@ -45,16 +45,12 @@ router.post("/", (req, res) => {
   if (!userData) {
     res.status(403).send("Please log in.");
   } else {
-    db.Portfolio.create({
-      name: req.body.name,
-      category: req.body.category,
+    db.Profile.create({
       bio: req.body.bio,
-      materialUsed: req.body.materialUsed,
-      forSale: req.body.forSale,
       UserId: userData.id,
     })
-      .then((newPortfolio) => {
-        res.json(newPortfolio);
+      .then((newProfile) => {
+        res.json(newProfile);
       })
       .catch((err) => {
         console.log(err);
@@ -64,9 +60,9 @@ router.post("/", (req, res) => {
 });
 
 // ***************************************** R ****
-router.get("/portfolios", (req, res) => {
+router.get("/profile", (req, res) => {
   db.Portfolio.findAll({
-    include: [db.Gallery],
+    include: [db.Project, db.Class],
   })
     .then((portfolios) => {
       res.json(portfolios);
@@ -78,21 +74,19 @@ router.get("/portfolios", (req, res) => {
 });
 
 // ***************************************** U ****
-router.get("/:id/portfolios", (req, res) => {
+router.get("/:id/profile", (req, res) => {
   const userData = authenticateMe(req);
 
-  db.Portfolio.findOne({
+  db.Profile.findOne({
     where: {
       id: req.params.id,
-    },
-    include: [db.Gallery],
+    }
   })
-    .then((portfolio) => {
+    .then((profile) => {
       console.log(userData);
-      console.log(portfolio);
       res.json({
-        portfolio: portfolio,
-        canEdit: userData && userData.id === portfolio.UserId,
+        profile: profile,
+        canEdit: userData && userData.id === profile.UserId,
       });
     })
     .catch((err) => {
@@ -101,36 +95,38 @@ router.get("/:id/portfolios", (req, res) => {
     });
 });
 
+
+////// Do we need delete profile? Shouldn't profile always exist, only can be edited?
 // ***************************************** D ****
-router.delete("/:id", (req, res) => {
-  const userData = authenticateMe(req);
-  db.Portfolio.findOne({
-    where: {
-      id: req.params.id,
-    },
-  })
-    .then((portfolio) => {
-      if (portfolio.UserId === userData.id) {
-        db.Portfolio.destroy({
-          where: {
-            id: req.params.id,
-          },
-        })
-          .then((delPortfolio) => {
-            res.json(delPortfolio);
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(500).json(err);
-          });
-      } else {
-        res.status(403).send("Wrong portfolio.");
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
+// router.delete("/:id", (req, res) => {
+//   const userData = authenticateMe(req);
+//   db.Profile.findOne({
+//     where: {
+//       id: req.params.id,
+//     },
+//   })
+//     .then((profile) => {
+//       if (profile.UserId === userData.id) {
+//         db.Profile.destroy({
+//           where: {
+//             id: req.params.id,
+//           },
+//         })
+//           .then((delProfile) => {
+//             res.json(delProfile);
+//           })
+//           .catch((err) => {
+//             console.log(err);
+//             res.status(500).json(err);
+//           });
+//       } else {
+//         res.status(403).send("Wrong profile.");
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.status(500).json(err);
+//     });
+// });
 
 module.exports = router;
