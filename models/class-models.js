@@ -24,10 +24,10 @@ module.exports = function(sequelize, DataTypes){
         type:DataTypes.BOOLEAN,
         allowNull:false,
     },
-    price:{
-        type:DataTypes.DECIMAL,
-        allowNull:false
-    },
+    // price:{
+    //     type:DataTypes.DECIMAL,
+    //     allowNull:false
+    // },
     location:{
         type:DataTypes.STRING,
         allowNull:false
