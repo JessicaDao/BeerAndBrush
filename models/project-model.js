@@ -4,15 +4,23 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
-        category: {
-            type: DataTypes.STRING,
+        dateStarted: {
+            type: DataTypes.DATE,
             allowNull: true
         },
-        bio: {
-            type: DataTypes.STRING,
-            allowNull: true
+        dateFinished: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        description: {
+            type: DataTypes.VARCHAR,
+            allowNull: false
         },
         materialUsed: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        category: {
             type: DataTypes.STRING,
             allowNull: true
         },
