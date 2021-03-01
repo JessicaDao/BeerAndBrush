@@ -82,7 +82,7 @@ router.get("/:project_id", async (req, res) => {
 // Do we need a findAll option? Would that be specific to user id as well?
 
 // ***************************************** U ****
-//not working
+//working
 router.put("/update/:project_id", (req, res) => {
     db.Project.update(req.body, {
         where: {
@@ -134,5 +134,5 @@ router.delete("/delete/:project_id", (req, res) => {
         res.status(500).json(err);
       });
   });
-  
+
 module.exports = router;
