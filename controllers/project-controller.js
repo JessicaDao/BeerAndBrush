@@ -31,18 +31,14 @@ const authenticateMe = (req) => {
 // ***************************************** C ****
 //working
 router.post("/new", (req, res) => {
-    // let user = await db.User.findOne({
-    //     where: {
-    //         id: req.body.userId
-    //     }
-    // })
-    // console.log(req.body)
     db.Project.create({
-        name: req.body.name,
-        category: req.body.category,
-        UserId: req.body.UserId,
-        bio: req.body.bio,
+        title: req.body.title,
+        artistName: req.body.artistName,
+        dateStarted: req.body.dateStarted,
+        dateFinished: req.body.dateFinished,
+        description: req.body.description,
         materialUsed: req.body.materialUsed,
+        category: req.body.category,
         forSale: req.body.forSale
     }).then(resp => {
         res.json({
@@ -51,17 +47,29 @@ router.post("/new", (req, res) => {
     }).catch(err => {
         res.status(500).json(err);
     })
-    // res.json({
-    //     data: newProject
-    // })
 })
+
 // ***************************************** R ****
-//working
+// Route to show public gallery items
+
+router.get("/gallery", async (req, res) => {
+    let findProject = await db.Project.findAll(
+        {
+            where: {
+                isPublic: true
+            }
+        })
+    res.json({
+        data: findProject,
+        msg: "Gallery found."
+    })
+})
+
 router.get("/:project_id", async (req, res) => {
     let findProject = await db.Project.findOne(
         {
             where: {
-                id: req.params.project_id
+                id: req.params.project
             }
         })
     res.json({
@@ -69,6 +77,8 @@ router.get("/:project_id", async (req, res) => {
         msg: "Project found."
     })
 })
+
+
 // Do we need a findAll option? Would that be specific to user id as well?
 
 // ***************************************** U ****

@@ -1,27 +1,22 @@
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes){
     var Review = sequelize.define('Review', {
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        category: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        bio: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        materialUsed: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        forSale: {
-            type: DataTypes.BOOLEAN,
-            default: false
-        }
-    });
-    { timestamps: true }
+    class:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
+    reviewer:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
+    content:{
+        type:DataTypes.DATE,
+        allowNull:false
+    }
+});
+    Review.associate = function(models){
+        Review.belongsTo(models.User);
 
+    };
     return Review;
 }
+
