@@ -1,6 +1,10 @@
 module.exports = function (sequelize, DataTypes) {
     var Project = sequelize.define('Project', {
-        name: {
+        title: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        artistName: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -27,6 +31,11 @@ module.exports = function (sequelize, DataTypes) {
         forSale: {
             type: DataTypes.BOOLEAN,
             default: false
+        },
+        isPublic: {
+            type: DataTypes.BOOLEAN,
+            default: false,
+            allowNull: false
         }
     });
     { timestamps: true }

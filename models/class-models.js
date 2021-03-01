@@ -36,6 +36,7 @@ module.exports = function(sequelize, DataTypes){
     //     type:DataTypes.TEXT,
     //     allowNull:false
     // } [-> review-model, but should we do a count for # of reviews? & star rating?]
+    }
 });
     Class.associate = function(models){
         Class.belongsTo(models.User);

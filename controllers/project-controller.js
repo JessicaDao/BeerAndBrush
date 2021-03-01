@@ -32,7 +32,8 @@ const authenticateMe = (req) => {
 //working
 router.post("/new", (req, res) => {
     db.Project.create({
-        name: req.body.name,
+        title: req.body.title,
+        artistName: req.body.artistName,
         dateStarted: req.body.dateStarted,
         dateFinished: req.body.dateFinished,
         description: req.body.description,
@@ -54,7 +55,20 @@ router.get("/:project_id", async (req, res) => {
     let findProject = await db.Project.findOne(
         {
             where: {
-                id: req.params.project_id
+                id: req.params.project
+            }
+        })
+    res.json({
+        data: findProject,
+        msg: "Project found."
+    })
+})
+
+router.get("/gallery", async (req, res) => {
+    let findProject = await db.Project.findAll(
+        {
+            where: {
+                id: req.params.project
             }
         })
     res.json({
