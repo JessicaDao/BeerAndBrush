@@ -32,7 +32,7 @@ const authenticateMe = (req) => {
 router.post("/", (req, res) => {
     const userData = authenticateMe(req);
     if (!userData) {
-        res.status(403).send("login first man");
+        res.status(403).send("Please login.");
     } else {
         db.Classes.findOne({
             where: {
@@ -49,7 +49,6 @@ router.post("/", (req, res) => {
                     price: req.body.price,
                     location: req.body.location,
                     price: req.body.price,
-                    reviews: req.body.reviews,
                     UserId: userData.id
                 }).then(newClass => {
                     res.json(newClass)
@@ -71,7 +70,7 @@ router.post("/", (req, res) => {
 
 // ***************************************** R ****
 router.get("/", (req, res) => {
-    db.Classes.findAll().then(data => {
+    db.Class.findAll().then(data => {
         res.json(data)
     }).catch(err => {
         res.status(500).json(err);
@@ -108,9 +107,6 @@ router.put("/classes/update/:id", (req, res) => {
         if (req.body.location !== null && req.body.location !== "") {
             classObj.location = req.body.location;
         }
-        if (req.body.reviews !== null && req.body.reviews !== "") {
-            classObj.reviews = req.body.reviews;
-        }
         db.classDetails.update(classObj, {
             where: {
                 userId: req.session.user.id,
@@ -144,7 +140,7 @@ router.delete("/:id", (req, res) => {
                 res.status(500).json(err)
             })
         } else {
-            res.status(403).send("not your fish")
+            res.status(403).send("Cannot delete.")
         }
     }).catch(err => {
         console.log(err);
