@@ -50,7 +50,21 @@ router.post("/new", (req, res) => {
 })
 
 // ***************************************** R ****
-//working
+// Route to show public gallery items
+
+router.get("/gallery", async (req, res) => {
+    let findProject = await db.Project.findAll(
+        {
+            where: {
+                isPublic: true
+            }
+        })
+    res.json({
+        data: findProject,
+        msg: "Gallery found."
+    })
+})
+
 router.get("/:project_id", async (req, res) => {
     let findProject = await db.Project.findOne(
         {
@@ -64,18 +78,7 @@ router.get("/:project_id", async (req, res) => {
     })
 })
 
-router.get("/gallery", async (req, res) => {
-    let findProject = await db.Project.findAll(
-        {
-            where: {
-                id: req.params.project
-            }
-        })
-    res.json({
-        data: findProject,
-        msg: "Project found."
-    })
-})
+
 // Do we need a findAll option? Would that be specific to user id as well?
 
 // ***************************************** U ****

@@ -17,7 +17,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false
         },
         description: {
-            type: DataTypes.VARCHAR,
+            type: DataTypes.STRING,
             allowNull: false
         },
         materialUsed: {
