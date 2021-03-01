@@ -4,6 +4,10 @@ const db = require("../models");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
+const User = require("../model/user"); 
+const cloudinary = require("../utils/cloudinary");
+const upload = require("../utils/multer");
+
 const authenticateMe = (req) => {
     let token = false;
     if (!req.headers) {
@@ -48,6 +52,25 @@ router.post("/new", (req, res) => {
         res.status(500).json(err);
     })
 })
+
+// Cloudinary post
+router.post("/", upload.single("image"), async (req, res) => {
+    try {
+      // Upload image to cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path);
+       // Create new user
+      let user = new User({
+        name: req.body.name,
+        avatar: result.secure_url,
+        cloudinary_id: result.public_id,
+      });
+      // Save user
+      await user.save();
+      res.json(user);
+    } catch (err) {
+      console.log(err);
+    }}); 
+   module.exports = router;
 
 // ***************************************** R ****
 // Route to show public gallery items
