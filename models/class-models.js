@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes){
-    var Events = sequelize.define('Events', {
+    var Class = sequelize.define('Class', {
     name:{
         type:DataTypes.STRING,
         allowNull:false
@@ -37,10 +37,10 @@ module.exports = function(sequelize, DataTypes){
         allowNull:false
     }
 });
-    Events.associate = function(models){
-        Events.belongsTo(models.User);
+    Class.associate = function(models){
+        Class.belongsTo(models.User);
 
     };
-    return Events;
+    return Class;
 }
 
