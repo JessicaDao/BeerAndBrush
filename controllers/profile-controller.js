@@ -45,7 +45,7 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
   const userData = authenticateMe(req);
   if (!userData) {
-    res.status(403).send("Please log in.");
+    res.status(403).send("Please login.");
   } else {
     db.Profile.create({
       bio: req.body.bio,

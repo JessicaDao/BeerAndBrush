@@ -44,6 +44,7 @@ router.post("/register", (req, res) => {
             email: req.body.email,
             uname: req.body.uname,
             pw: req.body.pw,
+            userType: req.body.userType
         }, "bananas",
             {
                 expiresIn: "2h"
@@ -87,6 +88,7 @@ router.post("/login", (req, res) => {
     })
 })
 
+// GET one user
 router.get("/:userId", (req, res) => {
     db.User.findOne({
         where: {
@@ -105,61 +107,47 @@ router.get("/:userId", (req, res) => {
     })
 })
 
-router.get("/all", (req, res) => {
+// GET all users
+router.get("/users", (req, res) => {
     db.User.findAll()
-        .then(resp => {
-            console.log(resp);
-            res.json({
-                data: resp
-            })
+        .then(users => {
+            console.log(users)
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({
-                data: err
+            res.status(500).send({
+                err
             })
         })
 })
 
 // ***************************************** U ****
 
-router.post("/update/:userId", (req, res) => {
+router.post("/update/:id", (req, res) => {
     db.User.update(req.body,
         {
             where: {
-                id: req.params.userId
+                id: req.params.id
             }
-        }).then(resp => {
-            console.log(resp);
-            res.json({
-                data: resp
-            })
+        }).then(updateUser => {
+            res.json(updateUser)
         }).catch(err => {
-            console.log(err);
-            res.status(500).json({
-                data: err
-            })
+            res.status(500).send(err)
         })
 })
 
 // ***************************************** D ****
 
-router.delete("/delete/:user_id", (req, res) => {
+router.delete("/delete/:id", (req, res) => {
     db.User.destroy({
         where: {
-            id: req.params.user_id
+            id: req.params.id
         }
-    }).then(resp => {
-        console.log(resp);
-        res.json({
-            data: resp,
-            msg: "successfully deleted"
-        })
+    }).then(delUser => {
+        res.json(delUser)
     }).catch(err => {
         console.log(err);
-        res.status(500).json({
-            data: err
-        })
+        res.status(500).send(err)
     })
 })
 
