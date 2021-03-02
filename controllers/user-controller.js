@@ -57,6 +57,8 @@ router.post("/register", (req, res) => {
 
 // Login
 router.post("/login", (req, res) => {
+    console.log("***********");
+    console.log(req.body);
     db.User.findOne({ //finds user
         where: {
             uname: req.body.uname
@@ -72,7 +74,13 @@ router.post("/login", (req, res) => {
                 {
                     expiresIn: "2h"
                 })
-            return res.json({ user, token })
+            return res.json({ 
+                data:{
+                    user,token
+                },
+                msg:"succezzfulzzz login"
+             })
+            // return res.json({ user, token })
         } else {
             res.status(401).send("Incorrect password. Try again.")
         }
