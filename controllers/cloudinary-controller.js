@@ -6,6 +6,9 @@ const User = require("../models/user-model");
 const cloudinary = require("../utils/cloudinary");
 const upload = require("../utils/multer");
 
+require('dotenv').config()
+
+
 // Cloudinary post
 router.post("/", upload.single("image"), async (req, res) => {
     try {
