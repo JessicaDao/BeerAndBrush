@@ -44,7 +44,7 @@ router.post("/register", (req, res) => {
             email: req.body.email,
             uname: req.body.uname,
             pw: req.body.pw,
-            userType: req.body.userType
+            isArtist: req.body.isArtist
         }, "bananas",
             {
                 expiresIn: "2h"
