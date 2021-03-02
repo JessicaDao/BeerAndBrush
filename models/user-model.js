@@ -26,7 +26,11 @@ module.exports = function(sequelize, DataTypes){
         allowNull:false,
         validate:{
          len:[8]
-      }}
+    }},
+     userType: {
+       type:DataTypes.STRING,
+       allowNull:false
+     }
     },
     { timestamps: true }
 );
