@@ -46,7 +46,6 @@ router.post("/", (req, res) => {
                     date: req.body.date,
                     time: req.body.time,
                     duration: req.body.duration,
-                    price: req.body.price,
                     location: req.body.location,
                     price: req.body.price,
                     UserId: userData.id
