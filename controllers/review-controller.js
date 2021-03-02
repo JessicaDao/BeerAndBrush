@@ -26,7 +26,7 @@ const authenticateMe = (req) => {
   return data;
 };
 
-router.get("/", (req, res) => {
+router.get("/reviews", (req, res) => {
   db.Review.findAll()
     .then((reviews) => {
       res.json(reviews);
@@ -37,16 +37,6 @@ router.get("/", (req, res) => {
     });
 });
 
-// router.get("/reviews", (req, res) => {
-//   db.Review.findAll({
-//       include: [db.Review]
-//   }).then(reviews => {
-//       res.json(reviews)
-//   }).catch(err => {
-//       console.log(err);
-//       res.status(500).json(err);
-//   })
-// })
 
 router.post("/", (req, res) => {
   const userData = authenticateMe(req);
