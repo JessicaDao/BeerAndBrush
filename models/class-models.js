@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes){
-    var Classes = sequelize.define('Classes', {
+    var Class = sequelize.define('Class', {
     name:{
         type:DataTypes.STRING,
         allowNull:false
@@ -24,22 +24,24 @@ module.exports = function(sequelize, DataTypes){
         type:DataTypes.BOOLEAN,
         allowNull:false,
     },
-    price:{
-        type:DataTypes.DECIMAL,
-        allowNull:false
-    },
+    // price:{
+    //     type:DataTypes.DECIMAL,
+    //     allowNull:false
+    // },
     location:{
         type:DataTypes.STRING,
         allowNull:false
-    },
-    reviews:{
-        type:DataTypes.TEXT,
-        allowNull:false
+    // },
+    // reviews:{
+    //     type:DataTypes.TEXT,
+    //     allowNull:false
+    // } [-> review-model, but should we do a count for # of reviews? & star rating?]
     }
 });
-    Classes.associate = function(models){
-        Classes.belongsTo(models.User);
+    Class.associate = function(models){
+        Class.belongsTo(models.User);
 
     };
-    return Classes;
+    return Class;
 }
+

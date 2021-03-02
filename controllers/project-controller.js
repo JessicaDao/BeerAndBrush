@@ -4,6 +4,10 @@ const db = require("../models");
 const bcrypt = require("bcrypt");
 const { jsxText } = require("@babel/types");
 
+const User = require("../models/user-model"); 
+const cloudinary = require("../utils/cloudinary");
+const upload = require("../utils/multer");
+
 const authenticateMe = (req) => {
     let token = false;
     if (!req.headers) {
@@ -31,18 +35,14 @@ const authenticateMe = (req) => {
 // ***************************************** C ****
 //working
 router.post("/new", (req, res) => {
-    // let user = await db.User.findOne({
-    //     where: {
-    //         id: req.body.userId
-    //     }
-    // })
-    // console.log(req.body)
     db.Project.create({
-        name: req.body.name,
-        category: req.body.category,
-        UserId: req.body.UserId,
-        bio: req.body.bio,
+        title: req.body.title,
+        artistName: req.body.artistName,
+        dateStarted: req.body.dateStarted,
+        dateFinished: req.body.dateFinished,
+        description: req.body.description,
         materialUsed: req.body.materialUsed,
+        category: req.body.category,
         forSale: req.body.forSale
     }).then(resp => {
         res.json({
@@ -51,17 +51,48 @@ router.post("/new", (req, res) => {
     }).catch(err => {
         res.status(500).json(err);
     })
-    // res.json({
-    //     data: newProject
-    // })
 })
+
+// Cloudinary post
+router.post("/", upload.single("image"), async (req, res) => {
+    try {
+      // Upload image to cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path);
+       // Create new user
+      let user = new User({
+        name: req.body.name,
+        avatar: result.secure_url,
+        cloudinary_id: result.public_id,
+      });
+      // Save user
+      await user.save();
+      res.json(user);
+    } catch (err) {
+      console.log(err);
+    }}); 
+   module.exports = router;
+
 // ***************************************** R ****
-//working
+// Route to show public gallery items
+
+router.get("/gallery", async (req, res) => {
+    let findProject = await db.Project.findAll(
+        {
+            where: {
+                isPublic: true
+            }
+        })
+    res.json({
+        data: findProject,
+        msg: "Gallery found."
+    })
+})
+
 router.get("/:project_id", async (req, res) => {
     let findProject = await db.Project.findOne(
         {
             where: {
-                id: req.params.project_id
+                id: req.params.project
             }
         })
     res.json({
@@ -69,10 +100,12 @@ router.get("/:project_id", async (req, res) => {
         msg: "Project found."
     })
 })
+
+
 // Do we need a findAll option? Would that be specific to user id as well?
 
 // ***************************************** U ****
-//not working
+//working
 router.put("/update/:project_id", (req, res) => {
     db.Project.update(req.body, {
         where: {
@@ -94,23 +127,50 @@ router.put("/update/:project_id", (req, res) => {
     // })
 })
 // ***************************************** D ****
-//not working
+//Cloudinary delete
+router.delete("/:id", async (req, res) => {
+    try {
+      // Find user by id
+      let user = await User.findById(req.params.id);
+      // Delete image from cloudinary
+      await cloudinary.uploader.destroy(user.cloudinary_id);
+      // Delete user from db
+      await user.remove();
+      res.json(user);
+    } catch (err) {
+      console.log(err);
+    }});
+
+//Project delete
 router.delete("/delete/:project_id", (req, res) => {
-    db.Project.destroy({
-        where: {
-            id: req.params.project_id
-        }
-    }).then(resp => {
-        res.json({
-            data: resp,
-            msg: "Project deleted."
-        })
-    }).catch(err => {
-        res.status(500).json(err);
+    const userData = authenticateMe(req);
+    db.Project.findOne({
+      where: {
+        id: req.params.id,
+      },
     })
-    // res.json({
-    //     // data: projectDelete,
-    //     msg: "Project deleted."
-    // })
-})
+      .then((project) => {
+        if (project.UserId === userData.id) {
+          db.Project.destroy({
+            where: {
+              id: req.params.id,
+            },
+          })
+            .then((delProject) => {
+              res.json(delProject);
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(500).json(err);
+            });
+        } else {
+          res.status(403).send("Try again.");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  });
+
 module.exports = router;

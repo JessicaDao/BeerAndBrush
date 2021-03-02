@@ -1,27 +1,11 @@
 module.exports = function (sequelize, DataTypes) {
-    var Portfolio = sequelize.define('Portfolio', {
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        category: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
+    var Profile = sequelize.define('Profile', {
         bio: {
             type: DataTypes.STRING,
-            allowNull: true
-        },
-        materialUsed: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        forSale: {
-            type: DataTypes.BOOLEAN,
-            default: false
+            allowNull: false
         }
     });
     { timestamps: true }
 
-    return Portfolio;
+    return Profile;
 }
