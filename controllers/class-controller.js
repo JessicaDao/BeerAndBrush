@@ -100,11 +100,11 @@ router.put("/classes/update/:id", (req, res) => {
         if (req.body.recurring !== null && req.body.recurring !== "") {
             classObj.recurring = req.body.recurring;
         }
-        if (req.body.price !== null && req.body.price !== "") {
-            classObj.price = req.body.price;
-        }
         if (req.body.location !== null && req.body.location !== "") {
             classObj.location = req.body.location;
+        }
+        if (req.body.price !== null && req.body.price !== "") {
+            classObj.price = req.body.price;
         }
         db.classDetails.update(classObj, {
             where: {
