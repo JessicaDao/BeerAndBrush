@@ -31,12 +31,12 @@ module.exports = function(sequelize, DataTypes){
     { timestamps: true }
 );
 
-    // User.associate = function(models){
-    //     User.hasMany(models.classes);
-    //     User.hasMany(models.project);
-    //     User.hasMany(models.reviews);
+    User.associate = function(models){
+        User.hasMany(models.Class);
+        User.hasMany(models.Project);
+        User.hasMany(models.Review);
 
-    // };
+    };
 
 //encrypts password
     User.beforeCreate(function(user) {
