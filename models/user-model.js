@@ -27,9 +27,10 @@ module.exports = function(sequelize, DataTypes){
         validate:{
          len:[8]
     }},
-     userType: {
-       type:DataTypes.STRING,
-       allowNull:false
+     isArtist: {
+       type:DataTypes.BOOLEAN,
+       allowNull:false,
+       default: true
      }
     },
     { timestamps: true }

@@ -44,7 +44,7 @@ router.post("/register", (req, res) => {
             email: req.body.email,
             uname: req.body.uname,
             pw: req.body.pw,
-            userType: req.body.userType
+            isArtist: req.body.isArtist
         }, "bananas",
             {
                 expiresIn: "2h"
@@ -75,13 +75,13 @@ router.post("/login", (req, res) => {
                 {
                     expiresIn: "2h"
                 })
+            // return res.json({ user, token })
             return res.json({ 
                 data:{
                     user,token
                 },
                 msg:"succezzfulzzz login"
              })
-            // return res.json({ user, token })
         } else {
             res.status(401).send("Incorrect password. Try again.")
         }
