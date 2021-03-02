@@ -27,7 +27,6 @@ const authenticateMe = (req) => {
 };
 
 // ***************************************** C ****
-//working
 router.post("/newProject", (req, res) => {
   const userData = authenticateMe(req);
   if (!userData) {
@@ -79,10 +78,8 @@ router.get("/:project_id", async (req, res) => {
   });
 });
 
-// Do we need a findAll option? Would that be specific to user id as well?
 
 // ***************************************** U ****
-//working
 router.put("/update/:project_id", (req, res) => {
   db.Project.update(req.body, {
     where: {
@@ -98,15 +95,9 @@ router.put("/update/:project_id", (req, res) => {
     .catch((err) => {
       res.status(500).json(err);
     });
-
-  // res.json({
-  //     data: projectUpdate,
-  //     msg: "Project updated."
-  // })
 });
-// ***************************************** D ****
 
-//Project delete
+// ***************************************** D ****
 router.delete("/delete/:project_id", (req, res) => {
   const userData = authenticateMe(req);
   db.Project.findOne({
