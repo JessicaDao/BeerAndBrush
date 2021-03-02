@@ -73,7 +73,13 @@ router.post("/login", (req, res) => {
                 {
                     expiresIn: "2h"
                 })
-            return res.json({ user, token })
+            // return res.json({ user, token })
+            return res.json({ 
+                data:{
+                    user,token
+                },
+                msg:"succezzfulzzz login"
+             })
         } else {
             res.status(401).send("Incorrect password. Try again.")
         }
