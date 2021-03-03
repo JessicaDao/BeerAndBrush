@@ -97,6 +97,7 @@ router.post("/new", (req, res) => {
 
 
 // ***************************************** R ****
+// Finds all classes
 router.get("/all", (req, res) => {
     db.Class.findAll().then(data => {
         res.json(data)
@@ -105,6 +106,7 @@ router.get("/all", (req, res) => {
     })
 })
 
+// Finds specific instructor classes
 router.get('/:id', (req, res) => {
     db.Class.findAll({
         where: {
