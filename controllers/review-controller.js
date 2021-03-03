@@ -26,7 +26,7 @@ const authenticateMe = (req) => {
   return data;
 };
 
-router.get("/", (req, res) => {
+router.get("/reviews", (req, res) => {
   db.Review.findAll()
     .then((reviews) => {
       res.json(reviews);
@@ -37,16 +37,6 @@ router.get("/", (req, res) => {
     });
 });
 
-// router.get("/reviews", (req, res) => {
-//   db.Review.findAll({
-//       include: [db.Review]
-//   }).then(reviews => {
-//       res.json(reviews)
-//   }).catch(err => {
-//       console.log(err);
-//       res.status(500).json(err);
-//   })
-// })
 
 router.post("/", (req, res) => {
   const userData = authenticateMe(req);
@@ -74,15 +64,9 @@ router.post("/", (req, res) => {
               console.log(err);
               res.status(500).json(err);
             });
-        } else {
-          res.status(403).send("Wrong reviewer.");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-      });
-  }
+          }
+})
+}
 });
 
 router.delete("/:id", (req, res) => {
@@ -92,8 +76,8 @@ router.delete("/:id", (req, res) => {
       id: req.params.id,
     },
   })
-    .then((reviewDel) => {
-      if (reviewDel.UserId === userData.id) {
+    .then((review) => {
+      if (review.UserId === userData.id) {
         db.Review.destroy({
           where: {
             id: req.params.id,

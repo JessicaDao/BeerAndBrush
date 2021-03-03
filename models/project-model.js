@@ -1,24 +1,41 @@
 module.exports = function (sequelize, DataTypes) {
     var Project = sequelize.define('Project', {
-        name: {
+        title: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        category: {
+        artistName: {
             type: DataTypes.STRING,
+            allowNull: false
+        },
+        dateStarted: {
+            type: DataTypes.DATE,
             allowNull: true
         },
-        bio: {
+        dateFinished: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        description: {
             type: DataTypes.STRING,
-            allowNull: true
+            allowNull: false
         },
         materialUsed: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        category: {
             type: DataTypes.STRING,
             allowNull: true
         },
         forSale: {
             type: DataTypes.BOOLEAN,
             default: false
+        },
+        isPublic: {
+            type: DataTypes.BOOLEAN,
+            default: false,
+            allowNull: false
         }
     });
     { timestamps: true }
@@ -27,10 +44,6 @@ module.exports = function (sequelize, DataTypes) {
     Project.associate = function (models) {
         Project.belongsTo(models.User);
     };
-
-    // User.associate = function(models){
-    //     User.hasMany(models._____);
-    // };
 
     return Project;
 }

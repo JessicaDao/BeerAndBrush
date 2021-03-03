@@ -26,7 +26,12 @@ module.exports = function(sequelize, DataTypes){
         allowNull:false,
         validate:{
          len:[8]
-      }}
+    }},
+     isArtist: {
+       type:DataTypes.BOOLEAN,
+       allowNull:false,
+       default: true
+     }
     },
     { timestamps: true }
 );
