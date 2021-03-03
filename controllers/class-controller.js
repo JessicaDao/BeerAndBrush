@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
-const user = require("../models/user-model");
-const bcrypt = require("bcrypt");
 
 
 const authenticateMe = (req) => {
@@ -30,10 +28,10 @@ const authenticateMe = (req) => {
 }
 // ***************************************** C ****
 router.post("/new", (req, res) => {
-    const userData = authenticateMe(req);
-    if (!userData) {
-        res.status(403).send("Please login.");
-    } else {
+    // const userData = authenticateMe(req);
+    // if (!userData) {
+    //     res.status(403).send("Please login.");
+    // } else {
         db.Class.create({
             name: req.body.name,
             level: req.body.level,
@@ -43,19 +41,20 @@ router.post("/new", (req, res) => {
             location: req.body.location,
             recurring: req.body.recurring,
             // price: req.body.price,
-            UserId: userData.id
-            // UserId: req.body.UserId
-        }).then(newClass => {
+            // UserId: userData.userId
+            UserId: req.body.userId
+        }).then(resp => {
+            console.log(resp);
             res.json({
-                data: newClass,
+                data: resp,
                 msg: "successful"
             })
         }).catch(err => {
             console.log(err);
             res.status(500).json(err);
         })
-    }
-})
+    })
+// })
 
 // previous code
 // router.post("/", (req, res) => {
@@ -98,9 +97,16 @@ router.post("/new", (req, res) => {
 // ***************************************** R ****
 // Finds all classes
 router.get("/all", (req, res) => {
-    db.Class.findAll().then(data => {
-        res.json(data)
+    db.Class.findAll()
+    .then(resp => {
+        console.log("running then");
+        console.log(resp);
+        res.json({
+            data: resp
+        })
     }).catch(err => {
+        console.log("running catch");
+        console.log(err);
         res.status(500).json(err);
     })
 })
