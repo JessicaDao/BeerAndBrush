@@ -85,6 +85,8 @@ router.post("/login", (req, res) => {
         } else {
             res.status(401).send("Incorrect password. Try again.")
         }
+    }).catch(err => {
+        console.log(err);
     })
 })
 
