@@ -20,24 +20,24 @@ module.exports = function(sequelize, DataTypes){
         type:DataTypes.DECIMAL,
         allowNull:false
     },
+        location:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
     recurring:{
         type:DataTypes.BOOLEAN,
-        allowNull:false,
-    },
+        default: false
+    }
     // price:{
     //     type:DataTypes.DECIMAL,
     //     allowNull:false
-    // },
-    location:{
-        type:DataTypes.STRING,
-        allowNull:false
     // },
     // reviews:{
     //     type:DataTypes.TEXT,
     //     allowNull:false
     // } [-> review-model, but should we do a count for # of reviews? & star rating?]
     }
-});
+);
     Class.associate = function(models){
         Class.belongsTo(models.User);
 
