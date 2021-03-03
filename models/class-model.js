@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes){
     },
     recurring:{
         type:DataTypes.BOOLEAN,
-        allowNull:true,
+        default: false
     },
     location:{
         type:DataTypes.STRING,
