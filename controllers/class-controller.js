@@ -29,51 +29,93 @@ const authenticateMe = (req) => {
     return data;
 }
 // ***************************************** C ****
-router.post("/", (req, res) => {
+router.post("/new", (req, res) => {
     const userData = authenticateMe(req);
     if (!userData) {
         res.status(403).send("Please login.");
     } else {
-        db.Classes.findOne({
-            where: {
-                id: req.body.classes
-            }
-        }).then(classes => {
-            if (classes.UserId === userData.id) {
-                db.Class.create({
-                    name: req.body.name,
-                    level: req.body.level,
-                    date: req.body.date,
-                    time: req.body.time,
-                    duration: req.body.duration,
-                    price: req.body.price,
-                    location: req.body.location,
-                    price: req.body.price,
-                    UserId: userData.id
-                }).then(newClass => {
-                    res.json(newClass)
-                }).catch(err => {
-                    console.log(err);
-                    res.status(500).json(err);
-                })
-            } else {
-                res.status(403).send("Wrong profile.")
-            }
+        db.Class.create({
+            name: req.body.name,
+            level: req.body.level,
+            date: req.body.date,
+            time: req.body.time,
+            duration: req.body.duration,
+            location: req.body.location,
+            recurring: req.body.recurring,
+            // price: req.body.price,
+            UserId: userData.id
+            // UserId: req.body.UserId
+        }).then(newClass => {
+            res.json({
+                data: newClass,
+                msg: "successful"
+            })
         }).catch(err => {
             console.log(err);
             res.status(500).json(err);
         })
-
     }
 })
 
+// router.post("/", (req, res) => {
+//     const userData = authenticateMe(req);
+//     if (!userData) {
+//         res.status(403).send("Please login.");
+//     } else {
+//         db.Classes.findOne({
+//             where: {
+//                 id: req.body.classes
+//             }
+//         }).then(classes => {
+//             if (classes.UserId === userData.id) {
+//                 db.Class.create({
+//                     name: req.body.name,
+//                     level: req.body.level,
+//                     date: req.body.date,
+//                     time: req.body.time,
+//                     duration: req.body.duration,
+//                     price: req.body.price,
+//                     location: req.body.location,
+//                     price: req.body.price,
+//                     UserId: userData.id
+//                 }).then(newClass => {
+//                     res.json(newClass)
+//                 }).catch(err => {
+//                     console.log(err);
+//                     res.status(500).json(err);
+//                 })
+//             } else {
+//                 res.status(403).send("Wrong profile.")
+//             }
+//         }).catch(err => {
+//             console.log(err);
+//             res.status(500).json(err);
+//         })
+//     }
+// })
+
 
 // ***************************************** R ****
-router.get("/", (req, res) => {
+router.get("/all", (req, res) => {
     db.Class.findAll().then(data => {
         res.json(data)
     }).catch(err => {
         res.status(500).json(err);
+    })
+})
+
+router.get('/:id', (req, res) => {
+    db.Class.findAll({
+        where: {
+            UserId: req.params.id
+        }
+    }).then(resp => {
+        console.log(resp);
+        res.json({
+            data: resp
+        })
+    }).catch(err => {
+        console.log(err);
     })
 })
 
@@ -118,6 +160,8 @@ router.put("/classes/update/:id", (req, res) => {
 
     }
 });
+
+
 
 // ***************************************** D ****
 
