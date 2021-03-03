@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes){
     },
     recurring:{
         type:DataTypes.BOOLEAN,
-        allowNull:false,
+        allowNull:true,
     },
     // price:{
     //     type:DataTypes.DECIMAL,
