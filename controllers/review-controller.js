@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models");
 const bcrypt = require("bcrypt");
-const { jsxText } = require("@babel/types");
+
 
 const authenticateMe = (req) => {
   let token = false;
@@ -54,7 +54,7 @@ router.post("/", (req, res) => {
           db.Review.create({
             class: req.body.name,
             reviewer: req.body.level,
-            content: req.body.date,
+            content: req.body.content,
             UserId: req.session.user.id,
           })
             .then((newReview) => {
