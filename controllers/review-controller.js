@@ -54,7 +54,7 @@ router.post("/", (req, res) => {
           db.Review.create({
             class: req.body.name,
             reviewer: req.body.level,
-            content: req.body.date,
+            content: req.body.content,
             UserId: req.session.user.id,
           })
             .then((newReview) => {
