@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("../models");
 const user = require("../models/user-model");
 const bcrypt = require("bcrypt");
-const { jsxText } = require("@babel/types");
+
 
 const authenticateMe = (req) => {
     let token = false;
@@ -46,7 +46,6 @@ router.post("/", (req, res) => {
                     date: req.body.date,
                     time: req.body.time,
                     duration: req.body.duration,
-                    price: req.body.price,
                     location: req.body.location,
                     price: req.body.price,
                     UserId: userData.id
@@ -101,11 +100,11 @@ router.put("/classes/update/:id", (req, res) => {
         if (req.body.recurring !== null && req.body.recurring !== "") {
             classObj.recurring = req.body.recurring;
         }
-        if (req.body.price !== null && req.body.price !== "") {
-            classObj.price = req.body.price;
-        }
         if (req.body.location !== null && req.body.location !== "") {
             classObj.location = req.body.location;
+        }
+        if (req.body.price !== null && req.body.price !== "") {
+            classObj.price = req.body.price;
         }
         db.classDetails.update(classObj, {
             where: {

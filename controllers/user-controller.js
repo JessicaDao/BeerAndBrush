@@ -3,7 +3,6 @@ const router = express.Router();
 const db = require("../models");
 const User = require("../models/user-model");
 const bcrypt = require("bcrypt");
-const { jsxText } = require("@babel/types");
 const jwt = require("jsonwebtoken");
 
 const authenticateMe = (req) => {
