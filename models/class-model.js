@@ -40,7 +40,7 @@ module.exports = function(sequelize, DataTypes){
 );
     Class.associate = function(models){
         Class.belongsTo(models.User);
-
+        Class.belongsToMany(models.Student, { through: "StudentClasses" });
     };
     return Class;
 }

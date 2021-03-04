@@ -14,10 +14,13 @@ module.exports = function (sequelize, DataTypes) {
     },
   });
 
-  const Classes = sequelize.define("Classes", { name: DataTypes.STRING });
-  const Student = sequelize.define("Student", { name: DataTypes.STRING });
-  Classes.belongsToMany(Student, { through: "StudentClasses" });
-  Student.belongsToMany(Classes, { through: "StudentClasses" });
+  // const Classes = sequelize.define("Classes", { name: DataTypes.STRING });
+  // const Student = sequelize.define("Student", { name: DataTypes.STRING });
+  Student.associate =(models)=>{
+    Student.belongsToMany(models.Class, { through: "StudentClasses" });
+  }
+  
+  
 
   return Student;
 };
