@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
+// const user = require("../models/user-model");
+// const bcrypt = require("bcrypt");
 
 
 const authenticateMe = (req) => {
@@ -14,17 +16,17 @@ const authenticateMe = (req) => {
     else {
         token = req.headers.authorization.split(" ")[1];
     }
-    let data = false;
-    if (token) {
-        data = jwt.verify(token, "bananas", (err, data) => {
-            if (err) {
-                return false;
-            } else {
-                return data
-            }
-        })
-    }
-    return data;
+    let loggedinUser;
+  if (token) {
+    loggedinUser = jwt.verify(token, "bananas", (err, data) => {
+      if (err) {
+        return false;
+      } else {
+        return data;
+      }
+    });
+  }
+  return loggedinUser;
 }
 // ***************************************** C ****
 router.post("/new", (req, res) => {
@@ -41,11 +43,11 @@ router.post("/new", (req, res) => {
             location: req.body.location,
             recurring: req.body.recurring,
             // price: req.body.price,
-            // UserId: userData.userId
-            UserId: req.body.userId
-        }).then(resp => {
-            console.log(resp);
+            // UserId: userData.id
+            UserId: req.body.UserId
+        }).then(newClass => {
             res.json({
+                // data: newClass,
                 data: resp,
                 msg: "successful"
             })
@@ -97,6 +99,8 @@ router.post("/new", (req, res) => {
 // ***************************************** R ****
 // Finds all classes
 router.get("/all", (req, res) => {
+    // db.Class.findAll().then(data => {
+    //     res.json(data)
     db.Class.findAll()
     .then(resp => {
         console.log("running then");
