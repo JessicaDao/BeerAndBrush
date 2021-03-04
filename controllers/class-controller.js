@@ -16,24 +16,24 @@ const authenticateMe = (req) => {
     else {
         token = req.headers.authorization.split(" ")[1];
     }
-    let data = false;
-    if (token) {
-        data = jwt.verify(token, "bananas", (err, data) => {
-            if (err) {
-                return false;
-            } else {
-                return data
-            }
-        })
-    }
-    return data;
+    let loggedinUser;
+  if (token) {
+    loggedinUser = jwt.verify(token, "bananas", (err, data) => {
+      if (err) {
+        return false;
+      } else {
+        return data;
+      }
+    });
+  }
+  return loggedinUser;
 }
 // ***************************************** C ****
 router.post("/new", (req, res) => {
-    // const userData = authenticateMe(req);
-    // if (!userData) {
-    //     res.status(403).send("Please login.");
-    // } else {
+    const userData = authenticateMe(req);
+    if (!userData) {
+        res.status(403).send("Please login.");
+    } else {
         db.Class.create({
             name: req.body.name,
             level: req.body.level,
@@ -55,7 +55,7 @@ router.post("/new", (req, res) => {
             console.log(err);
             res.status(500).json(err);
         })
-    // }
+    }
 })
 
 // previous code

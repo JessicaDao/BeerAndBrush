@@ -6,7 +6,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const authenticateMe = (req) => {
-  let token = false;
+    console.log("we are athorized");
+  let token;
   if (!req.headers) {
     token = false;
   } else if (!req.headers.authorization) {
@@ -14,9 +15,9 @@ const authenticateMe = (req) => {
   } else {
     token = req.headers.authorization.split(" ")[1];
   }
-  let data = false;
+  let loggedinUser;
   if (token) {
-    data = jwt.verify(token, "bananas", (err, data) => {
+    loggedinUser = jwt.verify(token, "bananas", (err, data) => {
       if (err) {
         return false;
       } else {
@@ -24,7 +25,7 @@ const authenticateMe = (req) => {
       }
     });
   }
-  return data;
+  return loggedinUser;
 };
 
 // Home Page
@@ -76,6 +77,7 @@ router.post("/login", (req, res) => {
           {
             id: user.id,
             uname: user.uname,
+            isArtist: user.isArtist,
           },
           "bananas",
           {
@@ -85,7 +87,6 @@ router.post("/login", (req, res) => {
         // return res.json({ user, token })
         return res.json({
           data: {
-            user,
             token,
           },
           msg: "succezzfulzzz login",
@@ -99,55 +100,36 @@ router.post("/login", (req, res) => {
     });
 });
 
-// GET one user
-router.get("/:userId", (req, res) => {
-  db.User.findOne({
-    where: {
-      id: req.params.userId,
-    },
-  })
-    .then((resp) => {
-      console.log(resp);
-      res.json({
-        data: resp,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        data: err,
-      });
-    });
-});
 
 // GET all users
 router.get("/users", (req, res) => {
-  db.User.findAll()
+    db.User.findAll()
     .then((users) => {
-      console.log(users);
+        console.log(users);
     })
     .catch((err) => {
-      console.log(err);
-      res.status(500).send({
-        err,
-      });
+        console.log(err);
+        res.status(500).send({
+            err,
+        });
     });
 });
 
 // ***************************************** U ****
 
 router.post("/update/:id", (req, res) => {
-  db.User.update(req.body, {
-    where: {
-      id: req.params.id,
-    },
-  })
+    db.User.update(req.body, {
+        where: {
+            id: req.params.id,
+        },
+    })
     .then((updateUser) => {
-      res.json(updateUser);
+        res.json(updateUser);
     })
     .catch((err) => {
-      res.status(500).send(err);
+        res.status(500).send(err);
     });
+    
 });
 
 // ***************************************** D ****
@@ -171,7 +153,9 @@ router.delete("/delete/:id", (req, res) => {
 
 // JWT secretclub
 router.get("/secretclub", (req, res) => {
+    console.log("secretclub entry");
   let tokenData = authenticateMe(req);
+  console.log("tokenData" + tokenData);
   if (tokenData) {
     db.User.findOne({
       where: {
@@ -179,6 +163,7 @@ router.get("/secretclub", (req, res) => {
       },
     })
       .then((user) => {
+          console.log("user" + user);
         res.json(user);
       })
       .catch((err) => {
@@ -189,4 +174,26 @@ router.get("/secretclub", (req, res) => {
   }
 });
 
+// GET one user
+router.get("/:userId", (req, res) => {
+    db.User.findOne({
+      where: {
+        id: req.params.userId,
+      },
+    })
+      .then((resp) => {
+        console.log(resp);
+        res.json({
+          data: resp,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({
+          data: err,
+        });
+      });
+  });
+
 module.exports = router;
+
