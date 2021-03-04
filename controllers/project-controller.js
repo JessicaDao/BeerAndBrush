@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const authenticateMe = (req) => {
   let token = false;
@@ -27,8 +28,11 @@ const authenticateMe = (req) => {
 
 // ***************************************** C ****
 router.post("/newProject", (req, res) => {
+  // console.log("this is new project")
   const userData = authenticateMe(req);
+  // console.log("user data", userData)
   if (!userData) {
+    // console.log("this is user data", userData)
     res.status(403).send("Login first.");
   } else {
     db.Project.create({
@@ -43,9 +47,11 @@ router.post("/newProject", (req, res) => {
       isPublic: req.body.isPublic
     })
       .then((newProject) => {
+        console.log("this is a new project", newProject)
         res.json(newProject);
       })
       .catch((err) => {
+        console.log("err", err)
         res.status(500).json(err);
       });
   }
