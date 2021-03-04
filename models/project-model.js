@@ -4,13 +4,13 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
-        artistName: {
-            type: DataTypes.STRING,
+        artistId: {
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         dateStarted: {
             type: DataTypes.DATE,
-            allowNull: true
+            allowNull: false
         },
         dateFinished: {
             type: DataTypes.DATE,
@@ -18,7 +18,7 @@ module.exports = function (sequelize, DataTypes) {
         },
         description: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         materialUsed: {
             type: DataTypes.STRING,
@@ -35,7 +35,6 @@ module.exports = function (sequelize, DataTypes) {
         isPublic: {
             type: DataTypes.BOOLEAN,
             default: false,
-            allowNull: false
         }
     });
     { timestamps: true }

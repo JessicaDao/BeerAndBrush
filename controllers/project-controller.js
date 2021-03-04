@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models");
 const bcrypt = require("bcrypt");
-const { jsxText } = require("@babel/types");
+const jwt = require("jsonwebtoken");
 
 const authenticateMe = (req) => {
   let token = false;
@@ -28,24 +28,30 @@ const authenticateMe = (req) => {
 
 // ***************************************** C ****
 router.post("/newProject", (req, res) => {
+  // console.log("this is new project")
   const userData = authenticateMe(req);
+  // console.log("user data", userData)
   if (!userData) {
+    // console.log("this is user data", userData)
     res.status(403).send("Login first.");
   } else {
     db.Project.create({
       title: req.body.title,
-      artistName: req.body.artistName,
+      artistId: req.body.artistId,
       dateStarted: req.body.dateStarted,
       dateFinished: req.body.dateFinished,
       description: req.body.description,
       materialUsed: req.body.materialUsed,
       category: req.body.category,
       forSale: req.body.forSale,
+      isPublic: req.body.isPublic
     })
       .then((newProject) => {
+        console.log("this is a new project", newProject)
         res.json(newProject);
       })
       .catch((err) => {
+        console.log("err", err)
         res.status(500).json(err);
       });
   }
