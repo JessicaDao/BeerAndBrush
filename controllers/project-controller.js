@@ -33,13 +33,14 @@ router.post("/newProject", (req, res) => {
   } else {
     db.Project.create({
       title: req.body.title,
-      artistName: req.body.artistName,
+      artistId: req.body.artistId,
       dateStarted: req.body.dateStarted,
       dateFinished: req.body.dateFinished,
       description: req.body.description,
       materialUsed: req.body.materialUsed,
       category: req.body.category,
       forSale: req.body.forSale,
+      isPublic: req.body.isPublic
     })
       .then((newProject) => {
         res.json(newProject);

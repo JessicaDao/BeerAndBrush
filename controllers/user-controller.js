@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const authenticateMe = (req) => {
-    console.log("we are athorized");
+  console.log("we are athorized");
   let token;
   if (!req.headers) {
     token = false;
@@ -29,9 +29,9 @@ const authenticateMe = (req) => {
 };
 
 // Home Page
-router.get("/", (req, res) => {
-  res.send("Currently on the home page.");
-});
+// router.get("/", (req, res) => {
+//   res.send("Currently on the home page.");
+// });
 
 // Registration
 router.post("/register", (req, res) => {
@@ -61,8 +61,6 @@ router.post("/register", (req, res) => {
 
 // Login
 router.post("/login", (req, res) => {
-  console.log("***********");
-  console.log(req.body);
   db.User.findOne({
     //finds user
     where: {
@@ -103,33 +101,33 @@ router.post("/login", (req, res) => {
 
 // GET all users
 router.get("/users", (req, res) => {
-    db.User.findAll()
+  db.User.findAll()
     .then((users) => {
-        console.log(users);
+      console.log(users);
     })
     .catch((err) => {
-        console.log(err);
-        res.status(500).send({
-            err,
-        });
+      console.log(err);
+      res.status(500).send({
+        err,
+      });
     });
 });
 
 // ***************************************** U ****
 
 router.post("/update/:id", (req, res) => {
-    db.User.update(req.body, {
-        where: {
-            id: req.params.id,
-        },
-    })
+  db.User.update(req.body, {
+    where: {
+      id: req.params.id,
+    },
+  })
     .then((updateUser) => {
-        res.json(updateUser);
+      res.json(updateUser);
     })
     .catch((err) => {
-        res.status(500).send(err);
+      res.status(500).send(err);
     });
-    
+
 });
 
 // ***************************************** D ****
@@ -153,7 +151,7 @@ router.delete("/delete/:id", (req, res) => {
 
 // JWT secretclub
 router.get("/secretclub", (req, res) => {
-    console.log("secretclub entry");
+  console.log("secretclub entry");
   let tokenData = authenticateMe(req);
   console.log("tokenData" + tokenData);
   if (tokenData) {
@@ -163,7 +161,7 @@ router.get("/secretclub", (req, res) => {
       },
     })
       .then((user) => {
-          console.log("user" + user);
+        console.log("user" + user);
         res.json(user);
       })
       .catch((err) => {
@@ -174,11 +172,37 @@ router.get("/secretclub", (req, res) => {
   }
 });
 
-// GET one user
-router.get("/:userId", (req, res) => {
+router.get("/get/:id", (req, res) => {
+  db.User.findOne({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((resp) => {
+      console.log(resp);
+      res.json({
+        data: resp,
+      });
+    })
+    .catch((err) => {
+      console.log("^^^^^^^^^^");
+      console.log(err);
+      console.log("^^^^^^^^^^");
+      res.status(500).json({
+        data: err,
+      });
+    });
+})
+
+// GET active user
+router.get("/", (req, res) => {
+  const userData = authenticateMe(req);
+  if (!userData) {
+    res.status(403).send("Please login.");
+  } else {
     db.User.findOne({
       where: {
-        id: req.params.userId,
+        id: userData.id,
       },
     })
       .then((resp) => {
@@ -193,7 +217,8 @@ router.get("/:userId", (req, res) => {
           data: err,
         });
       });
-  });
+  }
+})
 
 module.exports = router;
 
