@@ -7,9 +7,6 @@ const jwt = require("jsonwebtoken");
 
 
 const authenticateMe = (req) => {
-    console.log("^^^^^^^^^^^^^^^^^");
-    console.log(req);
-    console.log("^^^^^^^^^^^^^^^^^");
     let token = false;
     if (!req.headers) {
         token = false
@@ -34,10 +31,6 @@ const authenticateMe = (req) => {
 }
 // ***************************************** C ****
 router.post("/new", (req, res) => {
-    console.log("*************");
-    console.log(req.body);
-    console.log("*************");
-
     const userData = authenticateMe(req);
     if (!userData) {
         res.status(403).send("Please login.");
@@ -51,8 +44,8 @@ router.post("/new", (req, res) => {
             location: req.body.location,
             recurring: req.body.recurring,
             // price: req.body.price,
-            // UserId: userData.id
-            UserId: req.body.UserId
+            UserId: userData.id
+            // UserId: req.body.UserId
         }).then(resp => {
             res.json({
                 // data: newClass,
@@ -65,44 +58,6 @@ router.post("/new", (req, res) => {
         })
     }
 })
-
-// previous code
-// router.post("/", (req, res) => {
-//     const userData = authenticateMe(req);
-//     if (!userData) {
-//         res.status(403).send("Please login.");
-//     } else {
-//         db.Classes.findOne({
-//             where: {
-//                 id: req.body.classes
-//             }
-//         }).then(classes => {
-//             if (classes.UserId === userData.id) {
-//                 db.Class.create({
-//                     name: req.body.name,
-//                     level: req.body.level,
-//                     date: req.body.date,
-//                     time: req.body.time,
-//                     duration: req.body.duration,
-//                     location: req.body.location,
-//                     price: req.body.price,
-//                     UserId: userData.id
-//                 }).then(newClass => {
-//                     res.json(newClass)
-//                 }).catch(err => {
-//                     console.log(err);
-//                     res.status(500).json(err);
-//                 })
-//             } else {
-//                 res.status(403).send("Wrong profile.")
-//             }
-//         }).catch(err => {
-//             console.log(err);
-//             res.status(500).json(err);
-//         })
-//     }
-// })
-
 
 // ***************************************** R ****
 // Finds all classes
