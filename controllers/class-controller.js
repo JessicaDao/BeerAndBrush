@@ -1,11 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
+const jwt = require("jsonwebtoken");
 // const user = require("../models/user-model");
 // const bcrypt = require("bcrypt");
 
 
 const authenticateMe = (req) => {
+    console.log("^^^^^^^^^^^^^^^^^");
+    console.log(req);
+    console.log("^^^^^^^^^^^^^^^^^");
     let token = false;
     if (!req.headers) {
         token = false
@@ -30,10 +34,14 @@ const authenticateMe = (req) => {
 }
 // ***************************************** C ****
 router.post("/new", (req, res) => {
-    // const userData = authenticateMe(req);
-    // if (!userData) {
-    //     res.status(403).send("Please login.");
-    // } else {
+    console.log("*************");
+    console.log(req.body);
+    console.log("*************");
+
+    const userData = authenticateMe(req);
+    if (!userData) {
+        res.status(403).send("Please login.");
+    } else {
         db.Class.create({
             name: req.body.name,
             level: req.body.level,
@@ -45,7 +53,7 @@ router.post("/new", (req, res) => {
             // price: req.body.price,
             // UserId: userData.id
             UserId: req.body.UserId
-        }).then(newClass => {
+        }).then(resp => {
             res.json({
                 // data: newClass,
                 data: resp,
@@ -55,8 +63,8 @@ router.post("/new", (req, res) => {
             console.log(err);
             res.status(500).json(err);
         })
-    })
-// })
+    }
+})
 
 // previous code
 // router.post("/", (req, res) => {
